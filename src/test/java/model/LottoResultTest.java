@@ -1,41 +1,43 @@
 package model;
 
-import constant.LottoRankInfo;
-import model.LottoResult;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import constant.LottoRank;
 
 public class LottoResultTest {
 
-    LottoResult lottoResult;
+	LottoResult lottoResult;
 
-    @BeforeEach
-    void setUp() {
-        lottoResult = new LottoResult();
-    }
+	@BeforeEach
+	void setUp() {
+		lottoResult = new LottoResult();
+	}
 
-    @Test
-    void 집계_테스트() {
-        lottoResult.updateResult(6,false);
-        lottoResult.updateResult(5,true);
-        lottoResult.updateResult(5,false);
+	@Test
+	@DisplayName("집계_테스트")
+	void aggregationTest() {
+		lottoResult.updateResult(6, false);
+		lottoResult.updateResult(5, true);
+		lottoResult.updateResult(5, false);
 
-        Map<LottoRankInfo, Integer> result = lottoResult.getResult();
-        System.out.println(result);
-        assertThat(result.get(LottoRankInfo.FIRST)).isEqualTo(1);
-        assertThat(result.get(LottoRankInfo.SECOND)).isEqualTo(1);
-        assertThat(result.get(LottoRankInfo.THIRD)).isEqualTo(1);
-    }
+		Map<LottoRank, Integer> result = lottoResult.getResult();
+		System.out.println(result);
+		assertThat(result.get(LottoRank.FIRST)).isEqualTo(1);
+		assertThat(result.get(LottoRank.SECOND)).isEqualTo(1);
+		assertThat(result.get(LottoRank.THIRD)).isEqualTo(1);
+	}
 
-    @Test
-    void 통계_테스트() {
-        lottoResult.updateResult(3, false);
+	@Test
+	@DisplayName("통계_테스트")
+	void statisticTest() {
+		lottoResult.updateResult(3, false);
 
-        assertThat(lottoResult.getLottoPrize()).isEqualTo(new Money(5000));
-    }
+		assertThat(lottoResult.getLottoPrize()).isEqualTo(new Money(5000));
+	}
 }

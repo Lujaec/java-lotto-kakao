@@ -1,10 +1,9 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class MoneyTest {
@@ -16,12 +15,14 @@ class MoneyTest {
 	}
 
 	@Test
-	void 몇개_살_수_있는지_테스트() {
+	@DisplayName("몇개_살_수_있는지_테스트")
+	void numOfLottoCanBuyTest() {
 		assertThat(money.numOfLottoCanBuy()).isEqualTo(1);
 	}
 
 	@Test
-	void 수익률_테스트() {
-		assertThat(money.calculateReturnRatio(new Money(1000))).isEqualTo(1);
+	@DisplayName("수익률_테스트")
+	void calculateReturnRatioTest() {
+		assertThat(money.calculateReturnRatio(1)).isEqualTo(1);
 	}
 }

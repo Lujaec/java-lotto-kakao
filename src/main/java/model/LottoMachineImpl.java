@@ -10,23 +10,19 @@ import static constant.LottoConstants.*;
 
 public class LottoMachineImpl implements LottoMachine {
 
-    private static final List<LottoNumber> lottoNumberPool = IntStream.rangeClosed(1, 45)
-        .mapToObj(LottoNumber::new)
-        .collect(Collectors.toList());
+	public LottoMachineImpl() {
+	}
 
-    public LottoMachineImpl() {
-    }
+	public Lotto drawLotto() {
+		Collections.shuffle(lottoNumberPool);
+		List<LottoNumber> drewLottoNumbers = new ArrayList<>(lottoNumberPool.subList(0, MAX_LOTTO_NUMBER_SIZE));
+		Collections.sort(drewLottoNumbers);
+		return new Lotto(drewLottoNumbers);
+	}
 
-    public Lotto drawLotto() {
-        Collections.shuffle(lottoNumberPool);
-        List<LottoNumber> drewLottoNumbers = new ArrayList<>(lottoNumberPool.subList(0, MAX_LOTTO_NUMBER_SIZE));
-        Collections.sort(drewLottoNumbers);
-        return new Lotto(drewLottoNumbers);
-    }
-
-    public LottoList drawMaximumLottoByMoney(Money money) {
-        return IntStream.range(0, money.numOfLottoCanBuy())
-            .mapToObj(i -> drawLotto())
-            .collect(Collectors.collectingAndThen(Collectors.toList(), LottoList::new));
-    }
+	public List<Lotto> drawMaximumLottoByMoney(Money money) {
+		return IntStream.range(0, money.numOfLottoCanBuy())
+			.mapToObj(i -> drawLotto())
+			.collect(Collectors.toList());
+	}
 }

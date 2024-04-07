@@ -1,7 +1,9 @@
 package model;
 
+import java.util.List;
+
 public interface LottoMachine {
     Lotto drawLotto();
 
-    LottoList drawMaximumLottoByMoney(Money money);
+    List<Lotto> drawMaximumLottoByMoney(Money money);
 }

@@ -6,30 +6,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Lotto {
-    private final List<LottoNumber> lottoNumbers;
+	private final List<LottoNumber> lottoNumbers;
 
-    public Lotto(List<LottoNumber> lottoNumbers) {
-        validateDuplicateLottoNumber(lottoNumbers);
-        validateLottoNumberSize(lottoNumbers);
-        this.lottoNumbers = lottoNumbers;
-    }
+	public Lotto(List<LottoNumber> lottoNumbers) {
+		validateDuplicateLottoNumber(lottoNumbers);
+		validateLottoNumberSize(lottoNumbers);
+		this.lottoNumbers = lottoNumbers;
+	}
 
-    public List<Integer> getLottoNumbers() {
-        return lottoNumbers.stream()
-            .mapToInt(LottoNumber::getLottoNumber)
-            .boxed()
-            .collect(Collectors.toList());
-    }
+	public List<Integer> getLottoNumbers() {
+		return lottoNumbers.stream()
+			.mapToInt(LottoNumber::getLottoNumber)
+			.boxed()
+			.collect(Collectors.toList());
+	}
 
-    public Boolean hasLottoNumber(LottoNumber lottoNumber){
-        return lottoNumbers.stream()
-            .anyMatch(number -> number.isSame(lottoNumber));
-    }
+	public Boolean hasLottoNumber(LottoNumber lottoNumber) {
+		return lottoNumbers.contains(lottoNumber);
+	}
 
-    public int matchLottoNumbers(Lotto lotto) {
-        return (int) lottoNumbers.stream()
-            .filter(lotto::hasLottoNumber)
-            .count();
-    }
+	public int matchLottoNumbers(Lotto lotto) {
+		return (int)lottoNumbers.stream()
+			.filter(lotto::hasLottoNumber)
+			.count();
+	}
 
 }

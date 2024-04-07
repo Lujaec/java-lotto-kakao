@@ -6,7 +6,7 @@ import static util.Validator.*;
 import java.util.Objects;
 
 public class Money {
-	private final int money;
+	private int money;
 
 	public Money(String strMoney) {
 		validateIsNumber(strMoney);
@@ -15,23 +15,30 @@ public class Money {
 		this.money = intMoney;
 	}
 
-	public Money(int money){
+	public Money(int money) {
 		this.money = money;
+	}
+
+	public void buyLotto(int numOfLotto) {
+		validateBuyMoney(this, numOfLotto);
+		this.money -= numOfLotto * LOTTO_PRICE;
 	}
 
 	public int numOfLottoCanBuy() {
 		return money / LOTTO_PRICE;
 	}
 
-	public double calculateReturnRatio(Money money){
-		return (double) this.money / (money.numOfLottoCanBuy() * LOTTO_PRICE);
+	public double calculateReturnRatio(int numOfLottoBought) {
+		return (double)this.money / (numOfLottoBought * LOTTO_PRICE);
 	}
 
 	@Override
 	public boolean equals(Object object) {
-		if (this == object) return true;
-		if (object == null || getClass() != object.getClass()) return false;
-		Money money = (Money) object;
+		if (this == object)
+			return true;
+		if (object == null || getClass() != object.getClass())
+			return false;
+		Money money = (Money)object;
 		return this.money == money.money;
 	}
 
