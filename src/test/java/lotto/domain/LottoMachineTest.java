@@ -4,33 +4,18 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class LottoMachineTest {
 
-    @Test
-    void 로또_한장은_천원으로_여러_장을_구매할_수_있다() {
-        LottoMachine machine = new LottoMachine(1000);
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void 주어진_개수만큼_로또를_발행한다(int amount) {
+        LottoMachine machine = new LottoMachine();
 
-        List<Lotto> lottos = machine.issue(5000);
+        List<Lotto> lottos = machine.issue(amount);
 
-        assertThat(lottos).hasSize(5);
-    }
-
-    @Test
-    void 잔금은_무시한다() {
-        LottoMachine machine = new LottoMachine(1000);
-
-        List<Lotto> lottos = machine.issue(5500);
-
-        assertThat(lottos).hasSize(5);
-    }
-
-    @Test
-    void 로또를_한장도_구매할_수_없다면_예외를_던진다() {
-        LottoMachine machine = new LottoMachine(1000);
-
-        assertThatThrownBy(() -> machine.issue(500))
-            .isInstanceOf(RuntimeException.class);
+        assertThat(lottos).hasSize(amount);
     }
 }

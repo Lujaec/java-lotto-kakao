@@ -1,7 +1,7 @@
 package lotto.domain;
 
 import static lotto.domain.Lotto.*;
-import static lotto.domain.LottoNumbers.*;
+import static lotto.domain.LottoNumber.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,25 +12,19 @@ import java.util.stream.Stream;
 public class LottoMachine {
 
     private final Random random;
-    private final int lottoPrice;
 
-    public LottoMachine(int lottoPrice) {
+    public LottoMachine() {
         this.random = new Random();
-        this.lottoPrice = lottoPrice;
     }
 
-    public List<Lotto> issue(int money) {
-        validateMoney(money);
+    public List<Lotto> issue(int amount) {
+        return generateAutoLottos(amount);
+    }
 
+    private List<Lotto> generateAutoLottos(int amount) {
         return Stream.generate(this::issue)
-            .limit(money / lottoPrice)
+            .limit(amount)
             .collect(Collectors.toList());
-    }
-
-    private void validateMoney(int money) {
-        if (money < lottoPrice) {
-            throw new IllegalArgumentException("로또를 한장도 구매할 수 없습니다");
-        }
     }
 
     private Lotto issue() {
@@ -49,9 +43,5 @@ public class LottoMachine {
             return poolSize;
         }
         return number;
-    }
-
-    public int getLottoPrice() {
-        return lottoPrice;
     }
 }

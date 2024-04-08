@@ -28,12 +28,11 @@ public class Lotto {
         return numbers.countMatch(otherNumbers);
     }
 
-    public boolean containsAll(LottoNumbers otherNumbers) {
-        return numbers.containsAll(otherNumbers);
+    public boolean contains(LottoNumber otherNumber) {
+        return numbers.contains(otherNumber);
     }
 
-    @Override
-    public String toString() {
-        return numbers.toString();
+    public List<LottoNumber> getAscendingNumbers() {
+        return numbers.getAscendingNumbers();
     }
 }

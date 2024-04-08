@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import lotto.domain.Lotto;
 import lotto.domain.Prize;
@@ -18,23 +19,57 @@ public class View {
 
     public int promptExpense() {
         System.out.println("구입금액을 입력해주세요.");
-        return scanner.nextInt();
+        int expense = scanner.nextInt();
+        if (expense <= 0) {
+            throw new IllegalArgumentException("구입금액은 양수여야 합니다");
+        }
+        return expense;
     }
 
-    public void printLotto(List<Lotto> lotto) {
-        System.out.printf("%d개를 구매했습니다.\n", lotto.size());
+    public int promptManualCount() {
+        System.out.println("수동으로 구매할 로또 수를 입력해 주세요.");
+        int count = scanner.nextInt();
+        if (count < 0) {
+            throw new IllegalArgumentException("수동으로 구매할 로또 수는 음수일 수 없습니다");
+        }
+        return count;
+    }
+
+    public List<List<Integer>> promptManualLottos(int count) {
+        if (count <= 0) {
+            return List.of();
+        }
+        System.out.println("수동으로 구매할 번호를 입력해주세요.");
+        return Stream.generate(this::scanCsvIntegerList)
+            .limit(count)
+            .collect(Collectors.toList());
+    }
+
+    public void printLotto(List<Lotto> lotto, int manualCount) {
+        System.out.printf("수동으로 %d개, 자동으로 %d개를 구매했습니다.\n", manualCount, lotto.size() - manualCount);
         lotto.forEach(this::printLotto);
         System.out.println();
     }
 
     private void printLotto(Lotto lotto) {
         System.out.print("[");
-        System.out.print(lotto);
+        System.out.print(makeLottoCsvString(lotto));
         System.out.println("]");
+    }
+
+    private String makeLottoCsvString(Lotto lotto) {
+        return lotto.getAscendingNumbers()
+            .stream()
+            .map(String::valueOf)
+            .collect(Collectors.joining(", "));
     }
 
     public List<Integer> promptWinningNumbers() {
         System.out.println("지난 주 당첨 번호를 입력해주세요.");
+        return scanCsvIntegerList();
+    }
+
+    private List<Integer> scanCsvIntegerList() {
         return Arrays.stream(nextNotBlankLine().split(","))
             .map(String::trim)
             .map(Integer::parseInt)
@@ -68,7 +103,11 @@ public class View {
     }
 
     public void printRewardRate(double rate) {
-        System.out.printf("총 수익률은 %.2f입니다.\n", rate);
+        System.out.printf("총 수익률은 %.2f입니다.", rate);
+        if (rate < 1.0) {
+            System.out.print("(기준이 1이기 때문에 결과적으로 손해라는 의미임)");
+        }
+        System.out.println();
     }
 }
 
