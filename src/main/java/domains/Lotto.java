@@ -3,7 +3,6 @@ package domains;
 import utils.LottoUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Lotto {
     private final List<LottoNumber> lottoNumbers;
@@ -14,13 +13,11 @@ public class Lotto {
     }
 
     public static Lotto from(List<Integer> pickedNumbers) {
-        return new Lotto(LottoUtils.parsePickedNumbers(pickedNumbers));
+        return new Lotto(LottoUtils.convertList(pickedNumbers, LottoNumber::new));
     }
 
     public List<Integer> values() {
-        return lottoNumbers.stream()
-                .map(LottoNumber::value)
-                .collect(Collectors.toList());
+        return LottoUtils.convertList(lottoNumbers, LottoNumber::value);
     }
 
     public List<LottoNumber> numbers() {

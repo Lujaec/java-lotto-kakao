@@ -1,4 +1,7 @@
+import dtos.LottoDto;
+import dtos.LottoResultDto;
 import domains.*;
+import utils.LottoUtils;
 
 import java.util.List;
 import java.util.Scanner;
@@ -11,29 +14,39 @@ public class LottoController {
     }
 
     public void run() {
-        Lottos lottos = makeLottos();
-        LottoManager lottoManager = makeLottoManager(lottos);
+        Lottos lottos = retriveLottos();
+        LottoManager lottoManager = retriveLottoManager(lottos);
         showResult(lottoManager);
     }
 
     private void showResult(LottoManager lottoManager) {
-        lottoConsoleView.printWinningResult(lottoManager.winningResults());
-        lottoConsoleView.printRevenue(lottoManager.revenueRate());
+        LottoResultDto lottoResultDto = LottoResultDto.of(lottoManager.winningResults(), lottoManager.revenueRate());
+        lottoConsoleView.printResult(lottoResultDto);
     }
 
-    private LottoManager makeLottoManager(Lottos lottos) {
+    private LottoManager retriveLottoManager(Lottos lottos) {
         List<Integer> winningNumbersInput = lottoConsoleView.getWinningNumbersInput();
         int bonusBallInput = lottoConsoleView.getBonusBallInput();
         WinningLotto winningLotto = new WinningLotto(Lotto.from(winningNumbersInput), new LottoNumber(bonusBallInput));
         return new LottoManager(lottos, winningLotto);
     }
 
-    private Lottos makeLottos() {
+    private Lottos retriveLottos() {
         int money = lottoConsoleView.getMoneyInput();
-        LottoInputAmount lottoInputAmount = new LottoInputAmount(money);
-        Lottos lottos = LottoMachine.issue(lottoInputAmount);
-        lottoConsoleView.printIssuedLottos(lottos);
+        int numberOfManualLottos = lottoConsoleView.getNumberOfManualInput();
+
+        Lottos lottos = issueLotto(money, numberOfManualLottos);
+        List<LottoDto> lottoDtos = LottoUtils.convertList(lottos.values(), LottoDto::from);
+        lottoConsoleView.printIssuedLottos(lottoDtos, numberOfManualLottos);
+
         return lottos;
+    }
+
+    private Lottos issueLotto(int money, int numberOfManualLottos) {
+        LottoInputAmount lottoInputAmount = new LottoInputAmount(money, numberOfManualLottos);
+        List<List<Integer>> manualLottoNumbersList = lottoConsoleView.getManualLottoNumbers(numberOfManualLottos);
+
+        return LottoMachine.issue(lottoInputAmount, manualLottoNumbersList);
     }
 
     public static void main(String[] args) {

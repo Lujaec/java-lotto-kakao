@@ -1,17 +1,16 @@
 package utils;
 
-import domains.LottoNumber;
-
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class LottoUtils {
     private LottoUtils() {
     }
 
-    public static List<LottoNumber> parsePickedNumbers(List<Integer> pickedNumbers) {
-        return pickedNumbers.stream()
-                .map(LottoNumber::new)
+    public static <T, R> List<R> convertList(List<T> list, Function<? super T, ? extends R> function) {
+        return list.stream()
+                .map(function)
                 .collect(Collectors.toList());
     }
 }
