@@ -1,4 +1,4 @@
-package domain;
+package domain.lotto;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -7,6 +7,11 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import domain.Rank;
+import domain.lotto.Lotto;
+import domain.lotto.LottoNumber;
+import domain.lotto.WinningLotto;
 
 public class WinningLottoTest {
 	@Test
@@ -19,8 +24,8 @@ public class WinningLottoTest {
 
 		Rank rank = testWinningLotto.getRank(testLotto);
 
-		assertThat(rank).isEqualTo(Rank.MATCH_THREE);
-		assertThat(rank.getWinningMoney()).isEqualTo(Rank.MATCH_THREE.getWinningMoney());
+		assertThat(rank).isEqualTo(Rank.FIFTH_WIN);
+		assertThat(rank.getWinningMoney()).isEqualTo(Rank.FIFTH_WIN.getWinningMoney());
 	}
 
 	@Test
@@ -33,8 +38,8 @@ public class WinningLottoTest {
 
 		Rank rank = testWinningLotto.getRank(testLotto);
 
-		assertThat(rank).isEqualTo(Rank.MATCH_FOUR);
-		assertThat(rank.getWinningMoney()).isEqualTo(Rank.MATCH_FOUR.getWinningMoney());
+		assertThat(rank).isEqualTo(Rank.FOURTH_WIN);
+		assertThat(rank.getWinningMoney()).isEqualTo(Rank.FOURTH_WIN.getWinningMoney());
 	}
 
 	@Test
@@ -47,8 +52,8 @@ public class WinningLottoTest {
 
 		Rank rank = testWinningLotto.getRank(testLotto);
 
-		assertThat(rank).isEqualTo(Rank.MATCH_FIVE);
-		assertThat(rank.getWinningMoney()).isEqualTo(Rank.MATCH_FIVE.getWinningMoney());
+		assertThat(rank).isEqualTo(Rank.THIRD_WIN);
+		assertThat(rank.getWinningMoney()).isEqualTo(Rank.THIRD_WIN.getWinningMoney());
 	}
 
 	@Test
@@ -61,8 +66,8 @@ public class WinningLottoTest {
 
 		Rank rank = testWinningLotto.getRank(testLotto);
 
-		assertThat(rank).isEqualTo(Rank.MATCH_FIVE_WITH_BONUS);
-		assertThat(rank.getWinningMoney()).isEqualTo(Rank.MATCH_FIVE_WITH_BONUS.getWinningMoney());
+		assertThat(rank).isEqualTo(Rank.SECOND_WIN);
+		assertThat(rank.getWinningMoney()).isEqualTo(Rank.SECOND_WIN.getWinningMoney());
 	}
 
 	@Test
@@ -75,8 +80,8 @@ public class WinningLottoTest {
 
 		Rank rank = testWinningLotto.getRank(testLotto);
 
-		assertThat(rank).isEqualTo(Rank.MATCH_SIX);
-		assertThat(rank.getWinningMoney()).isEqualTo(Rank.MATCH_SIX.getWinningMoney());
+		assertThat(rank).isEqualTo(Rank.FIRST_WIN);
+		assertThat(rank.getWinningMoney()).isEqualTo(Rank.FIRST_WIN.getWinningMoney());
 	}
 
 	private Lotto convertToLotto(int ...lottoNumbers) {

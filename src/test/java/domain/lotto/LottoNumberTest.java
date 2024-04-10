@@ -1,10 +1,11 @@
-package domain;
+package domain.lotto;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
+import domain.lotto.LottoNumber;
 
 public class LottoNumberTest {
 	@Test

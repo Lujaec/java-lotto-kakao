@@ -14,10 +14,10 @@ public class RankTest {
 		Rank four = Rank.findByMatchNumberCount(4, false);
 		Rank six = Rank.findByMatchNumberCount(6, false);
 
-		assertThat(lose).isEqualTo(Rank.LOSE);
-		assertThat(three).isEqualTo(Rank.MATCH_THREE);
-		assertThat(four).isEqualTo(Rank.MATCH_FOUR);
-		assertThat(six).isEqualTo(Rank.MATCH_SIX);
+		assertThat(lose).isEqualTo(Rank.NONE);
+		assertThat(three).isEqualTo(Rank.FIFTH_WIN);
+		assertThat(four).isEqualTo(Rank.FOURTH_WIN);
+		assertThat(six).isEqualTo(Rank.FIRST_WIN);
 	}
 
 	@Test
@@ -26,7 +26,7 @@ public class RankTest {
 		Rank hasBonus = Rank.findByMatchNumberCount(5, true);
 		Rank hasNotBonus = Rank.findByMatchNumberCount(5, false);
 
-		assertThat(hasBonus).isEqualTo(Rank.MATCH_FIVE_WITH_BONUS);
-		assertThat(hasNotBonus).isEqualTo(Rank.MATCH_FIVE);
+		assertThat(hasBonus).isEqualTo(Rank.SECOND_WIN);
+		assertThat(hasNotBonus).isEqualTo(Rank.THIRD_WIN);
 	}
 }

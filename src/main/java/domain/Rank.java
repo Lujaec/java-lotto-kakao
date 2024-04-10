@@ -3,12 +3,12 @@ package domain;
 import java.util.Arrays;
 
 public enum Rank {
-	LOSE(0, new WinningMoney(WinningMoney.ZERO)),
-	MATCH_THREE(3, new WinningMoney(WinningMoney.MATCH_THREE)),
-	MATCH_FOUR(4, new WinningMoney(WinningMoney.MATCH_FOUR)),
-	MATCH_FIVE(5, new WinningMoney(WinningMoney.MATCH_FIVE)),
-	MATCH_FIVE_WITH_BONUS(5, new WinningMoney(WinningMoney.MATCH_FIVE_WITH_BONUS)),
-	MATCH_SIX(6, new WinningMoney(WinningMoney.MATCH_SIX));
+	NONE(0, new WinningMoney(0)),
+	FIFTH_WIN(3, new WinningMoney(5_000)),
+	FOURTH_WIN(4, new WinningMoney(50_000)),
+	THIRD_WIN(5, new WinningMoney(1_500_000)),
+	SECOND_WIN(5, new WinningMoney(30_000_000)),
+	FIRST_WIN(6, new WinningMoney(2_000_000_000));
 
 	private final int matchNumberCount;
 	private final WinningMoney winningMoney;
@@ -18,20 +18,24 @@ public enum Rank {
 		this.winningMoney = winningMoney;
 	}
 
-	public WinningMoney getWinningMoney() {
-		return winningMoney;
-	}
-
 	public static Rank findByMatchNumberCount(int matchNumberCount, boolean hasBonusNumber) {
-		if (matchNumberCount == MATCH_FIVE.matchNumberCount && hasBonusNumber) {
-			return MATCH_FIVE_WITH_BONUS;
+		if (matchNumberCount == SECOND_WIN.matchNumberCount && hasBonusNumber) {
+			return SECOND_WIN;
 		}
-		if (matchNumberCount == MATCH_FIVE.matchNumberCount) {
-			return MATCH_FIVE;
+		if (matchNumberCount == THIRD_WIN.matchNumberCount) {
+			return THIRD_WIN;
 		}
 		return Arrays.stream(Rank.values())
 			.filter(rank -> rank.matchNumberCount == matchNumberCount)
 			.findFirst()
-			.orElse(Rank.LOSE);
+			.orElse(NONE);
+	}
+	
+	public int getMatchNumberCount() {
+		return matchNumberCount;
+	}
+
+	public WinningMoney getWinningMoney() {
+		return winningMoney;
 	}
 }

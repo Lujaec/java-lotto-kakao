@@ -1,4 +1,8 @@
-package domain;
+package domain.lotto;
+
+import domain.Rank;
+import domain.lotto.Lotto;
+import domain.lotto.LottoNumber;
 
 public class WinningLotto {
 	private final Lotto winnigLotto;

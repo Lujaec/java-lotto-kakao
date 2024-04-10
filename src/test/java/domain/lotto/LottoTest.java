@@ -1,4 +1,4 @@
-package domain;
+package domain.lotto;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import domain.lotto.Lotto;
+import domain.lotto.LottoNumber;
 
 public class LottoTest {
 
@@ -37,6 +40,15 @@ public class LottoTest {
 
 		assertThat(lotto.contains(new LottoNumber(6))).isTrue();
 		assertThat(lotto.contains(new LottoNumber(7))).isFalse();
+	}
+
+	@Test
+	@DisplayName("일치하는 번호의 개수를 반환한다.")
+	void countSameNumberTest() {
+		Lotto lotto = convertToLotto(6, 5, 4, 3, 2, 1);
+		Lotto other = convertToLotto(6, 5, 4, 3, 2, 1);
+
+		assertThat(lotto.countSameNumber(other)).isEqualTo(6);
 	}
 
 	private Lotto convertToLotto(int ...lottoNumbers) {

@@ -9,6 +9,11 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import domain.lotto.Lotto;
+import domain.lotto.LottoNumber;
+import domain.lotto.Lottos;
+import domain.lotto.WinningLotto;
+
 public class WinningResultTest {
 	@Test
 	@DisplayName("당첨 통계 정보를 계산할 수 있다.")
@@ -17,12 +22,12 @@ public class WinningResultTest {
 		// when : 당첨 통계(각 당첨 개수, 상금)를 계산한다.
 		WinningResult result = generateTestWinningResult();
 
-		assertThat(result.getWinningCount(Rank.LOSE)).isEqualTo(1);
-		assertThat(result.getWinningCount(Rank.MATCH_THREE)).isEqualTo(0);
-		assertThat(result.getWinningCount(Rank.MATCH_FOUR)).isEqualTo(1);
-		assertThat(result.getWinningCount(Rank.MATCH_FIVE)).isEqualTo(0);
-		assertThat(result.getWinningCount(Rank.MATCH_FIVE_WITH_BONUS)).isEqualTo(1);
-		assertThat(result.getWinningCount(Rank.MATCH_SIX)).isEqualTo(1);
+		assertThat(result.getWinningCount(Rank.NONE)).isEqualTo(1);
+		assertThat(result.getWinningCount(Rank.FIFTH_WIN)).isEqualTo(0);
+		assertThat(result.getWinningCount(Rank.FOURTH_WIN)).isEqualTo(1);
+		assertThat(result.getWinningCount(Rank.THIRD_WIN)).isEqualTo(0);
+		assertThat(result.getWinningCount(Rank.SECOND_WIN)).isEqualTo(1);
+		assertThat(result.getWinningCount(Rank.FOURTH_WIN)).isEqualTo(1);
 	}
 
 	@Test
@@ -32,10 +37,10 @@ public class WinningResultTest {
 		// when : 당첨 통계(각 당첨 개수, 상금)를 계산한다.
 		WinningResult result = generateTestWinningResult();
 
-		WinningMoney resultMoney = new WinningMoney(WinningMoney.ZERO);
-		resultMoney.addWinningMoney(new WinningMoney(WinningMoney.MATCH_FOUR));
-		resultMoney.addWinningMoney(new WinningMoney(WinningMoney.MATCH_FIVE_WITH_BONUS));
-		resultMoney.addWinningMoney(new WinningMoney(WinningMoney.MATCH_SIX));
+		WinningMoney resultMoney = new WinningMoney(Rank.NONE.getWinningMoney().getMoney());
+		resultMoney.add(new WinningMoney(Rank.FOURTH_WIN.getWinningMoney().getMoney()));
+		resultMoney.add(new WinningMoney(Rank.SECOND_WIN.getWinningMoney().getMoney()));
+		resultMoney.add(new WinningMoney(Rank.FIRST_WIN.getWinningMoney().getMoney()));
 
 		assertThat(result.getWinningMoney()).isEqualTo(resultMoney);
 	}
@@ -53,7 +58,7 @@ public class WinningResultTest {
 		WinningLotto testWinningLotto = new WinningLotto(winnigLotto, new LottoNumber(10));
 
 		// 결과 계산
-		return WinningResult.of(testWinningLotto, testLottos);
+		return testLottos.calculateWinningResult(testWinningLotto);
 	}
 
 	private Lotto convertToLotto(int ...lottoNumbers) {
