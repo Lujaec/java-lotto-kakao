@@ -1,6 +1,8 @@
 package lotto.domain;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -9,11 +11,11 @@ public class Lotto {
     private static final String INVALID_LOTTO_SIZE_MESSAGE = "로또는 6개의 번호로 구성되어야 합니다.";
     private static final String DUPLICATED_NUMBERS_MESSAGE = "로또 번호는 겹치면 안 됩니다.";
 
-    private TreeSet<Ball> balls;
+    private final Set<Ball> balls;
 
     public Lotto(List<Ball> balls) {
         validateBalls(balls);
-        this.balls = new TreeSet<>(balls);
+        this.balls = Collections.unmodifiableSet(new TreeSet<>(balls));
     }
 
     private void validateBalls(List<Ball> balls) {
@@ -41,7 +43,7 @@ public class Lotto {
         return balls.contains(target);
     }
 
-    public TreeSet<Ball> getBalls() {
+    public Set<Ball> getBalls() {
         return this.balls;
     }
 

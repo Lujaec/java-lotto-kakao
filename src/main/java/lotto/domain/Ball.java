@@ -1,5 +1,6 @@
 package lotto.domain;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -9,18 +10,28 @@ public class Ball implements Comparable<Ball> {
     private static final int MIN_NUMBER = 1;
     private static final int MAX_NUMBER = 45;
     private static final String INVALID_NUMBER_RANGE_MESSAGE = "로또 번호는 1 이상 45 이하만 가능합니다.";
-    private static final List<Ball> ballPool = IntStream.rangeClosed(MIN_NUMBER, MAX_NUMBER)
-            .mapToObj(Ball::new)
-            .collect(Collectors.toList());
+    private static final List<Ball> ballPool = Collections.unmodifiableList(
+            IntStream.rangeClosed(MIN_NUMBER, MAX_NUMBER)
+                    .mapToObj(Ball::new)
+                    .collect(Collectors.toList())
+    );
 
     private final int number;
 
-    public Ball(int number) {
-        validateNumber(number);
+    private Ball(int number) {
         this.number = number;
     }
 
-    private void validateNumber(int number) {
+    public static Ball of(int number) {
+        validateNumber(number);
+        return ballPool.get(number - 1);
+    }
+
+    public static List<Ball> allBalls() {
+        return ballPool;
+    }
+
+    private static void validateNumber(int number) {
         if (number < MIN_NUMBER || number > MAX_NUMBER) {
             throw new IllegalArgumentException(INVALID_NUMBER_RANGE_MESSAGE);
         }
@@ -28,10 +39,6 @@ public class Ball implements Comparable<Ball> {
 
     public int getNumber() {
         return number;
-    }
-
-    public static List<Ball> allBalls() {
-        return ballPool;
     }
 
     @Override
