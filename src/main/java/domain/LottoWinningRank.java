@@ -18,8 +18,8 @@ public enum LottoWinningRank {
 		this.prize = prize;
 	}
 
-	public static LottoWinningRank calculateRank(int matchCount, boolean hasBonusNumber) {
-		if (hasBonusNumber && matchCount == 5) {
+	public static LottoWinningRank calculateWinningRank(int matchCount, boolean hasBonusNumber) {
+		if (hasBonusNumber && matchCount == SECOND_PRIZE.getMatchCount()) {
 			return SECOND_PRIZE;
 		}
 		return Arrays.stream(values())

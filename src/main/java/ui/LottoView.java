@@ -20,27 +20,51 @@ public class LottoView {
 		return new Cash(Integer.parseInt(SCANNER.nextLine()));
 	}
 
-	public static void displayPaidTicketCount(int ticketCount) {
-		System.out.printf("%d개를 구매했습니다.%n", ticketCount);
+	public static int getCountOfManualTickets() {
+		System.out.printf("%n수동으로 구매할 로또 수를 입력해 주세요.%n");
+
+		return Integer.parseInt(SCANNER.nextLine());
+	}
+
+	public static List<List<Integer>> getManualLottoTickets(int countOfManualTickets) {
+		System.out.printf("%n수동으로 구매할 번호를 입력해 주세요.%n");
+		List<List<Integer>> lottoTickets = new ArrayList<>();
+
+		for (int i = 0; i < countOfManualTickets; i++) {
+			String line = SCANNER.nextLine();
+			List<Integer> numberStrings = Stream.of(line.split(","))
+				.map(String::trim)
+				.map(Integer::parseInt)
+				.collect(Collectors.toUnmodifiableList());
+			lottoTickets.add(numberStrings);
+		}
+
+		return lottoTickets;
+	}
+
+	public static void displayPaidTicketCount(int manualTicketCount, int randomTicketCount) {
+		System.out.printf("%n수동으로 %d장, 자동으로 %d개를 구매했습니다.%n", manualTicketCount, randomTicketCount);
 	}
 
 	public static void displayLottoTickets(LottoTickets lottoTickets) {
 		StringBuilder builder = new StringBuilder();
 		for (LottoTicket lottoTicket : lottoTickets.getLottoTickets()) {
-			builder.append(lottoTicket.toString());
+			List<LottoNumber> sortedLottoNumbers = lottoTicket.getLottoNumbers();
+			Collections.sort(sortedLottoNumbers);
+			builder.append(sortedLottoNumbers.toString());
 			builder.append("\n");
 		}
 		System.out.println(builder);
 	}
 
-	public static LottoTicket getWinningNumbers() {
+	public static List<Integer> getWinningNumbers() {
 		System.out.println("지난 주 당첨 번호를 입력해 주세요.");
 		String line = SCANNER.nextLine();
 		List<Integer> numberStrings = Stream.of(line.split(","))
 			.map(String::trim)
 			.map(Integer::parseInt)
 			.collect(Collectors.toUnmodifiableList());
-		return LottoTicket.of(numberStrings);
+		return numberStrings;
 	}
 
 	public static LottoNumber getBonusNumber() {
@@ -60,7 +84,8 @@ public class LottoView {
 		System.out.println(builder);
 	}
 
-	private static void appendRankResult(StringBuilder builder, LottoGameResult lottoGameResult, LottoWinningRank lottoWinningRank) {
+	private static void appendRankResult(StringBuilder builder, LottoGameResult lottoGameResult,
+		LottoWinningRank lottoWinningRank) {
 		builder.append(String.format("%d개 일치 ", lottoWinningRank.getMatchCount()));
 
 		if (lottoWinningRank == LottoWinningRank.SECOND_PRIZE) {

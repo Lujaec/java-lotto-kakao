@@ -5,8 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import domain.LottoWinningRank;
-
 public class LottoWinningRankTest {
 	@ParameterizedTest
 	@CsvSource({
@@ -19,7 +17,7 @@ public class LottoWinningRankTest {
 		"0, LOSE",
 	})
 	void 보너스_번호가_불일치하는_경우_로또_순위를_계산(int matchCount, LottoWinningRank lottoWinningRank) {
-		assertThat(LottoWinningRank.calculateRank(matchCount, false)).isEqualTo(lottoWinningRank);
+		assertThat(LottoWinningRank.calculateWinningRank(matchCount, false)).isEqualTo(lottoWinningRank);
 	}
 
 	@ParameterizedTest
@@ -33,6 +31,6 @@ public class LottoWinningRankTest {
 		"0, LOSE",
 	})
 	void 보너스_번호가_일치하는_경우_로또_순위를_계산(int matchCount, LottoWinningRank lottoWinningRank) {
-		assertThat(LottoWinningRank.calculateRank(matchCount, true)).isEqualTo(lottoWinningRank);
+		assertThat(LottoWinningRank.calculateWinningRank(matchCount, true)).isEqualTo(lottoWinningRank);
 	}
 }

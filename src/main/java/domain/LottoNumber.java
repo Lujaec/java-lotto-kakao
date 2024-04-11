@@ -1,21 +1,22 @@
 package domain;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class LottoNumber implements Comparable<LottoNumber> {
 	private static final int MIN_LOTTO_NUMBER = 1;
 	private static final int MAX_LOTTO_NUMBER = 45;
-	private static final List<LottoNumber> CACHE = new ArrayList<>();
+	private static final List<LottoNumber> LOTTO_NUMBERS;
 
 	private final int value;
 
 	static {
-		for (int i = MIN_LOTTO_NUMBER; i <= MAX_LOTTO_NUMBER; i++) {
-			CACHE.add(new LottoNumber(i));
-		}
+		LOTTO_NUMBERS = IntStream.rangeClosed(MIN_LOTTO_NUMBER, MAX_LOTTO_NUMBER)
+			.mapToObj(LottoNumber::new)
+			.collect(Collectors.toList());
 	}
 
 	public LottoNumber(int value) {
@@ -24,8 +25,11 @@ public class LottoNumber implements Comparable<LottoNumber> {
 	}
 
 	public static LottoNumber of(int value) {
-		validateLottoNumber(value);
-		return CACHE.get(value);
+		try {
+			return LOTTO_NUMBERS.get(value - 1);
+		} catch (IndexOutOfBoundsException e) {
+			return new LottoNumber(value);
+		}
 	}
 
 	private static void validateLottoNumber(int value) {
@@ -36,7 +40,7 @@ public class LottoNumber implements Comparable<LottoNumber> {
 	}
 
 	public static List<LottoNumber> values() {
-		return Collections.unmodifiableList(CACHE);
+		return Collections.unmodifiableList(LOTTO_NUMBERS);
 	}
 
 	@Override

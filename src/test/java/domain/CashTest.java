@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import domain.Cash;
-
 public class CashTest {
 	@Test
 	void 캐시가_음수면_예외를_던진다() {
@@ -24,5 +22,22 @@ public class CashTest {
 		Cash cash = new Cash(15100);
 
 		assertThat(cash.getTicketCount()).isEqualTo(15);
+	}
+
+	@Test
+	void 구매할_티켓_가격의_총합보다_캐시가_적으면_예외를_던진다() {
+		Cash cash = new Cash(1000);
+
+		assertThatExceptionOfType(IllegalArgumentException.class)
+			.isThrownBy(() -> cash.purchaseLottoTickets(2));
+	}
+
+	@Test
+	void 티켓을_구매하면_캐시에서_차감된다() {
+		Cash cash = new Cash(2000);
+
+		cash.purchaseLottoTickets(1);
+
+		assertThat(cash).isEqualTo(new Cash(1000));
 	}
 }

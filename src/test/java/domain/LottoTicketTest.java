@@ -9,9 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import domain.LottoNumber;
-import domain.LottoTicket;
-
 public class LottoTicketTest {
 	@Test
 	void 로또_번호_6개로_생성할_수_있다() {
@@ -54,7 +51,8 @@ public class LottoTicketTest {
 		"1, 2, 3, 4, 5, 6, 6",
 		"4, 2, 3, 1, 5, 8, 5",
 		"9, 8, 1, 2, 3, 4, 4"})
-	void 두_로또_번호_사이의_동일한_번호의_갯수를_반환할_수_있다(int number1, int number2, int number3, int number4, int number5, int number6, int matchCount) {
+	void 두_로또_번호_사이의_동일한_번호의_갯수를_반환할_수_있다(int number1, int number2, int number3, int number4, int number5, int number6,
+		int matchCount) {
 		LottoTicket lottoTicket1 = LottoTicket.of(List.of(1, 2, 3, 4, 5, 6));
 		LottoTicket lottoTicket2 = LottoTicket.of(List.of(number1, number2, number3, number4, number5, number6));
 

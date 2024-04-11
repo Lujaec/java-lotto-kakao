@@ -1,20 +1,19 @@
 package domain;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LottoTicket {
-	private static final int LOTTO_NUMBER_COUNT = 6;
+	public static final int LOTTO_NUMBER_COUNT = 6;
 	public static final int PRICE = 1000;
 
 	private final List<LottoNumber> lottoNumbers;
 
-	private LottoTicket(List<LottoNumber> lottoNumbers) {
+	public LottoTicket(List<LottoNumber> lottoNumbers) {
 		validateSize(lottoNumbers);
 		validateDuplicate(lottoNumbers);
-		this.lottoNumbers = lottoNumbers;
+		this.lottoNumbers = new ArrayList<>(lottoNumbers);
 	}
 
 	public static LottoTicket of(List<Integer> numbers) {
@@ -24,20 +23,10 @@ public class LottoTicket {
 		return new LottoTicket(lottoNumbers);
 	}
 
-	public static LottoTicket random() {
-		List<LottoNumber> shuffledNumbers = getShuffledNumbers();
-		return new LottoTicket(shuffledNumbers.subList(0, LOTTO_NUMBER_COUNT));
-	}
-
-	private static List<LottoNumber> getShuffledNumbers() {
-		List<LottoNumber> shuffledNumbers = new ArrayList<>(LottoNumber.values());
-		Collections.shuffle(shuffledNumbers);
-		return shuffledNumbers;
-	}
-
 	private void validateSize(List<LottoNumber> lottoNumbers) {
 		if (lottoNumbers.size() != LOTTO_NUMBER_COUNT) {
-			throw new IllegalArgumentException(String.format("로또 번호는 %d개여야 합니다. value: %d", LOTTO_NUMBER_COUNT, lottoNumbers.size()));
+			throw new IllegalArgumentException(
+				String.format("로또 번호는 %d개여야 합니다. value: %d", LOTTO_NUMBER_COUNT, lottoNumbers.size()));
 		}
 	}
 
@@ -55,10 +44,7 @@ public class LottoTicket {
 		return Long.valueOf(lottoNumbers.stream().filter(lottoTicket::contains).count()).intValue();
 	}
 
-	@Override
-	public String toString() {
-		List<LottoNumber> sortedLottoNumbers = new ArrayList<>(lottoNumbers);
-		Collections.sort(sortedLottoNumbers);
-		return sortedLottoNumbers.toString();
+	public List<LottoNumber> getLottoNumbers() {
+		return new ArrayList<>(lottoNumbers);
 	}
 }

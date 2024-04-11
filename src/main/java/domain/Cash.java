@@ -1,8 +1,10 @@
 package domain;
 
+import java.util.Objects;
+
 public class Cash {
 
-	private final int value;
+	private int value;
 
 	public Cash(int value) {
 		validateNegative(value);
@@ -18,11 +20,32 @@ public class Cash {
 
 	private void validateLessThanTicketPrice(int value) {
 		if (value < LottoTicket.PRICE) {
-			throw new IllegalArgumentException(String.format("잔여 Cash가 부족합니다. value: %d < price: %d", value, LottoTicket.PRICE));
+			throw new IllegalArgumentException(
+				String.format("잔여 Cash가 부족합니다. value: %d < price: %d", value, LottoTicket.PRICE));
 		}
 	}
 
 	public int getTicketCount() {
 		return value / LottoTicket.PRICE;
+	}
+
+	public void purchaseLottoTickets(int countOfTickets) {
+		this.value -= LottoTicket.PRICE * countOfTickets;
+		validateNegative(value);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Cash cash = (Cash)o;
+		return value == cash.value;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(value);
 	}
 }
