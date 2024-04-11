@@ -1,15 +1,23 @@
 package model.vo;
 
-import static constant.LottoConstants.LOTTO_PRICE;
-
 public class PurchaseAmount {
-    private final int amount;
+    private final int autoAmount;
+    private final int manualAmount;
 
-    public PurchaseAmount(int payment) {
-        this.amount = payment / LOTTO_PRICE;
+    public PurchaseAmount(int autoAmount, int manualAmount) {
+        this.autoAmount = autoAmount;
+        this.manualAmount = manualAmount;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getTotalAmount() {
+        return autoAmount + manualAmount;
+    }
+
+    public int getManualAmount() {
+        return manualAmount;
+    }
+
+    public int getAutoAmount() {
+        return autoAmount;
     }
 }

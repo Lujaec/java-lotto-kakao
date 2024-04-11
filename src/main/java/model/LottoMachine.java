@@ -1,5 +1,7 @@
 package model;
 
-public interface LottoMachine {
-    UserLotto extractLottoNumbers();
+public class LottoMachine {
+    public UserLotto extractLottoNumbers(Strategy strategy) {
+        return strategy.perform();
+    }
 }

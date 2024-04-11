@@ -10,7 +10,7 @@ public class UserLottoTest {
 
     @BeforeEach
     void setUp() {
-        userLotto =  new UserLotto(Arrays.asList(1, 2, 3, 4, 5, 6));
+        userLotto =  UserLotto.create(Arrays.asList(1, 2, 3, 4, 5, 6));
     }
 
     @Test
@@ -24,7 +24,7 @@ public class UserLottoTest {
     void 사용자_로또_길이_익셉션_테스트() {
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() ->
-                        userLotto = new UserLotto(Arrays.asList(1,2,3,4,5,45,43))
+                        userLotto = UserLotto.create(Arrays.asList(1,2,3,4,5,45,43))
                 );
     }
 
@@ -32,7 +32,7 @@ public class UserLottoTest {
     void 사용자_로또_범위_익셉션_테스트() {
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() ->
-                        userLotto = new UserLotto(Arrays.asList(1,2,3,4,45,46))
+                        userLotto = UserLotto.create(Arrays.asList(1,2,3,4,45,46))
                 );
     }
 }

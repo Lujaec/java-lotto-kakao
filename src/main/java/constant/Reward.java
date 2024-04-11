@@ -7,7 +7,7 @@ public enum Reward {
     FOURTH(50_000, 4, false),
     FIFTH(5_000, 3, false);
 
-    private int prize;
+    private long prize;
     private int matchCount;
     private boolean bonus;
 
@@ -17,7 +17,7 @@ public enum Reward {
         this.bonus = bonus;
     }
 
-    public int getPrice() {
+    public long getPrice() {
         return prize;
     }
 
