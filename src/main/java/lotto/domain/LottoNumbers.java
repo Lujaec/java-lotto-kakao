@@ -12,8 +12,8 @@ public class LottoNumbers {
     public LottoNumbers(Collection<Integer> numbers) {
         validateNumbersUnique(numbers);
         this.numbers = numbers.stream()
-            .map(LottoNumber::new)
-            .collect(Collectors.toSet());
+                              .map(LottoNumber::new)
+                              .collect(Collectors.toSet());
     }
 
     private void validateNumbersUnique(Collection<Integer> numbers) {
@@ -44,7 +44,8 @@ public class LottoNumbers {
     @Override
     public String toString() {
         return numbers.stream()
-            .map(Object::toString)
-            .collect(Collectors.joining(", "));
+                      .sorted()
+                      .map(Object::toString)
+                      .collect(Collectors.joining(", "));
     }
 }

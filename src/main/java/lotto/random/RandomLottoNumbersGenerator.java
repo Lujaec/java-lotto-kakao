@@ -9,23 +9,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import lotto.domain.Lotto;
-import lotto.domain.LottoMachine;
+import lotto.domain.LottoNumberGenerator;
+import lotto.domain.LottoNumbers;
 
-public class RandomLottoMachine extends LottoMachine {
+public class RandomLottoNumbersGenerator implements LottoNumberGenerator {
 
     private final List<Integer> numbers;
 
-    public RandomLottoMachine() {
+    public RandomLottoNumbersGenerator() {
         this.numbers = Stream.iterate(MIN_LOTTO_NUMBER, x -> x + 1)
                              .limit(MAX_LOTTO_NUMBER)
                              .collect(Collectors.toList());
     }
 
     @Override
-    protected Lotto issue() {
+    public LottoNumbers generate() {
         Collections.shuffle(numbers);
         List<Integer> lottoNumbers = numbers.subList(0, LOTTO_SIZE);
-        return new Lotto(lottoNumbers);
+        return new LottoNumbers(lottoNumbers);
     }
 }

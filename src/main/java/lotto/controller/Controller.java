@@ -1,6 +1,9 @@
 package lotto.controller;
 
+import static lotto.domain.LottoMachine.LOTTO_PRICE;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lotto.domain.Lotto;
 import lotto.domain.LottoMachine;
@@ -22,21 +25,38 @@ public class Controller {
     }
 
     public void run() {
-        List<Lotto> lotto = buyLotto();
+        long expense = inputView.promptExpense();
+        int manualCount = inputView.promptManualCount();
+
+        List<Lotto> lotto = buyLotto(expense, manualCount);
+        outputView.printLotto(lotto, manualCount);
+
         int lottoCount = lotto.size();
         WinningLotto winningLotto = publishWinningLotto();
 
         Prizes prizes = new Prizes(lotto, winningLotto);
 
-        printReward(prizes);
-        outputView.printRewardRate(prizes.getRewardRate(LottoMachine.LOTTO_PRICE * lottoCount));
+        printPrizes(prizes);
+        outputView.printRewardRate(prizes.getRewardRate(LOTTO_PRICE * lottoCount));
     }
 
-    private List<Lotto> buyLotto() {
-        int expense = inputView.promptExpense();
-        List<Lotto> lotto = lottoMachine.issue(expense);
-        outputView.printLotto(lotto);
+    private List<Lotto> buyLotto(long expense, int manualCount) {
+        if (LOTTO_PRICE * manualCount > expense) {
+            throw new IllegalArgumentException("구입 금액보다 많은 로또를 구매할 수 없습니다.");
+        }
+
+        List<Lotto> lotto = buyManualLotto(manualCount);
+        expense -= LOTTO_PRICE * manualCount;
+
+        lotto.addAll(lottoMachine.issue(expense));
         return lotto;
+    }
+
+    private List<Lotto> buyManualLotto(int manualCount) {
+        List<List<Integer>> manualNumbers = inputView.promptManualNumbers(manualCount);
+        return manualNumbers.stream()
+                            .map(Lotto::new)
+                            .collect(Collectors.toList());
     }
 
     private WinningLotto publishWinningLotto() {
@@ -45,7 +65,7 @@ public class Controller {
         return new WinningLotto(numbers, bonus);
     }
 
-    private void printReward(Prizes prizes) {
+    private void printPrizes(Prizes prizes) {
         outputView.printPrizeHeader();
         Prize.reversedValuesForReward().forEach(prize -> printPrize(prize, prizes));
     }
