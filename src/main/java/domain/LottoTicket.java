@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,12 @@ public class LottoTicket {
     private static final int TICKET_SIZE = 6;
 
     private final List<LottoNumber> lottoNumbers;
+
+    public LottoTicket(String lottoNumbers) {
+        this(Arrays.stream(lottoNumbers.split(", "))
+            .map(Integer::parseInt)
+            .collect(Collectors.toList()));
+    }
 
     public LottoTicket(List<Integer> numbers) {
         validateNotDuplicated(numbers);

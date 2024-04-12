@@ -17,8 +17,28 @@ public class Money {
         }
     }
 
-    public double divide(int divisor) {
-        return (double) this.value / divisor;
+    public Money buy(Money price, Quantity quantity) {
+        long used = price.value * quantity.getValue();
+        validateRemainMoney(used);
+
+        return new Money(this.value - used);
+    }
+
+    private void validateRemainMoney(long need) {
+        if (this.value < need) {
+            throw new IllegalArgumentException("금액이 부족합니다.");
+        }
+    }
+
+    public Quantity calculatePurchaseQuantity(Money price) {
+        validatePurchasePrice(price);
+        return Quantity.subtract(this.value, price.value);
+    }
+
+    private void validatePurchasePrice(Money price) {
+        if (price.value == 0) {
+            throw new IllegalArgumentException("구매 금액은 0이 될 수 없습니다.");
+        }
     }
 
     @Override

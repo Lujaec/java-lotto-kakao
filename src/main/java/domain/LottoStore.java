@@ -1,26 +1,41 @@
 package domain;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Objects;
 
 public class LottoStore {
 
-    private static final int LOTTO_PRICE = 1000;
+    private static final Money LOTTO_PRICE = new Money(1000);
 
-    private final int lottoCount;
+    private Money availableMoney;
+    private ManualLotto manualLottos;
+    private AutoLotto autoLottos;
 
     public LottoStore(Money money) {
-        this.lottoCount = (int) money.divide(LOTTO_PRICE);
+        this.availableMoney = money;
     }
 
-    public int getLottoCount() {
-        return lottoCount;
+    public int getManualLottoCount() {
+        return Objects.nonNull(manualLottos) ? manualLottos.getLottoSize() : 0;
     }
 
-    public List<LottoTicket> getLottoTickets(NumberGenerator numberGenerator) {
-        return IntStream.range(0, lottoCount)
-            .mapToObj(number -> new LottoTicket(numberGenerator.generateNumbers()))
-            .collect(Collectors.toList());
+    public int getAutoLottoCount() {
+        return Objects.nonNull(autoLottos)? autoLottos.getLottoSize() : 0;
+    }
+
+    public void buyAutoLottos(NumberGenerator numberGenerator) {
+        Quantity availableAutoLottoCount = availableMoney.calculatePurchaseQuantity(LOTTO_PRICE);
+        this.autoLottos = new AutoLotto(availableAutoLottoCount.getValue(), numberGenerator);
+    }
+
+    public void buyManualLottos(List<String> manualLottoNumbers) {
+        this.manualLottos = new ManualLotto(manualLottoNumbers);
+        this.availableMoney = availableMoney.buy(LOTTO_PRICE, new Quantity(manualLottos.getLottoSize()));
+    }
+
+    public List<LottoTicket> getLottos() {
+        List<LottoTicket> lottos = manualLottos.getLottos();
+        lottos.addAll(autoLottos.getLottos());
+        return lottos;
     }
 }

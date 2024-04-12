@@ -2,9 +2,11 @@ import domain.LottoGame;
 import domain.LottoStore;
 import domain.LottoTicket;
 import domain.Money;
+import domain.Quantity;
 import domain.WinningLotto;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import view.InputView;
 import view.OutputView;
 
@@ -36,9 +38,25 @@ public class LottoMain {
         inputView.inputString();
 
         LottoStore lottoStore = new LottoStore(money);
-        outputView.printLottoCount(lottoStore.getLottoCount());
+        buyManualLottos(lottoStore);
 
-        return lottoStore.getLottoTickets(new LottoNumberGenerator());
+        lottoStore.buyAutoLottos(new LottoNumberGenerator());
+        outputView.printLottoCount(lottoStore.getManualLottoCount(), lottoStore.getAutoLottoCount());
+
+        return lottoStore.getLottos();
+    }
+
+    private static void buyManualLottos(LottoStore lottoStore) {
+        outputView.printManualLottoCount();
+        Quantity manualLottoCount = new Quantity(inputView.inputInt());
+        inputView.inputString();
+
+        outputView.printManualLottoNumbers();
+        List<String> manualLottoNumbers = LongStream.range(0, manualLottoCount.getValue())
+            .mapToObj(value -> inputView.inputString())
+            .collect(Collectors.toList());
+
+        lottoStore.buyManualLottos(manualLottoNumbers);
     }
 
     private static void noticeResult(WinningLotto winningLotto, List<LottoTicket> lottoTickets) {

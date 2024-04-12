@@ -1,18 +1,15 @@
+package domain;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
-import domain.LottoGame;
-import domain.LottoNumber;
-import domain.LottoPrice;
-import domain.LottoTicket;
-import domain.WinningLotto;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("LottoGame 단위 테스트")
-class LottoGameTest {
+@DisplayName("LottoResult 단위 테스트")
+public class LottoResultTest {
 
     private final LottoTicket winningLottoTicket = new LottoTicket(List.of(1, 2, 3, 4, 5, 6));
     private final LottoNumber bonusNumber = new LottoNumber(7);
@@ -25,8 +22,8 @@ class LottoGameTest {
             new LottoTicket(List.of(1, 2, 3, 4, 7, 8))
         );
 
-        LottoGame lottoGame = new LottoGame(winningLotto, lottoTickets);
-        Map<LottoPrice, Integer> result = lottoGame.getRank();
+        LottoResult lottoResult = new LottoResult(lottoTickets, winningLotto);
+        Map<LottoPrice, Integer> result = lottoResult.getLottoResult();
 
         assertThat(result).containsEntry(LottoPrice.NOTHING, 1);
         assertThat(result).containsEntry(LottoPrice.FOURTH, 1);
