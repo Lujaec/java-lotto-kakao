@@ -33,7 +33,7 @@ public enum LottoRank {
         return this == SECOND;
     }
 
-    public int getPrize() {
+    public long getPrize() {
         return prize;
     }
 

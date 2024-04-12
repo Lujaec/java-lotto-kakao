@@ -1,5 +1,6 @@
 package lotto.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,15 +10,15 @@ public class LottoTickets {
     private final List<LottoTicket> lottoTickets;
 
     public LottoTickets(List<LottoTicket> lottoTickets) {
-        this.lottoTickets = lottoTickets;
+        this.lottoTickets = new ArrayList<>(lottoTickets);
     }
 
-    public LottoResult getWinningResult(WinningLottoTicket winningTicket) {
+    public LottoResult makeWinningResult(WinningLottoTicket winningTicket) {
         List<LottoRank> lottoRanks = lottoTickets.stream()
                 .map(winningTicket::match)
                 .collect(Collectors.toList());
 
-        return new LottoResult(lottoRanks, new PurchaseAmount(lottoTickets.size() * LottoTicket.PRICE));
+        return new LottoResult(lottoRanks);
     }
 
     public int getSize() {
@@ -26,5 +27,10 @@ public class LottoTickets {
 
     public List<LottoTicket> getLottoTickets() {
         return Collections.unmodifiableList(lottoTickets);
+    }
+
+    public LottoTickets add(LottoTickets additionalLottoTickets) {
+        lottoTickets.addAll(additionalLottoTickets.getLottoTickets());
+        return this;
     }
 }

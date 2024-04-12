@@ -4,10 +4,10 @@ import java.util.*;
 
 public class LottoTicket {
 
-    public static final Long PRICE = 1_000L;
+    public static final int PRICE = 1_000;
     public static final int SIZE = 6;
 
-    private final SortedSet<LottoNumber> lottoNumbers;
+    private final Set<LottoNumber> lottoNumbers;
 
     public LottoTicket(List<LottoNumber> lottoNumbers) {
         this.lottoNumbers = new TreeSet<>(lottoNumbers);

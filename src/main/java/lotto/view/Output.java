@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class Output {
 
-    public static void printPurchaseCount(int purchaseCount) {
-        System.out.println(purchaseCount + "개를 구매했습니다.");
+    public static void printPurchaseCount(int manualPurchaseCount, int autoPurchaseCount) {
+        System.out.println("수동으로 " + manualPurchaseCount + "장, 자동으로 " + + autoPurchaseCount + " 장을 구매했습니다.");
     }
 
     private Output() {
@@ -26,7 +26,7 @@ public class Output {
         System.out.println("\n당첨 통계");
         System.out.println("---------");
         lottoResultDto.getLottoResult().entrySet().stream()
-                .sorted(Comparator.comparingInt(o -> o.getKey().getPrize()))
+                .sorted(Comparator.comparingLong(o -> o.getKey().getPrize()))
                 .forEach(entry -> printLottoRank(entry.getKey(), entry.getValue()));
         System.out.println("총 수익률은 " + lottoResultDto.getReturnRate() + "입니다.");
     }
