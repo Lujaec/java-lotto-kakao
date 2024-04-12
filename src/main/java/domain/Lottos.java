@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Lottos {
     private final List<Lotto> lottos;
@@ -10,9 +11,12 @@ public class Lottos {
     }
 
     public WinningResult calculateWinningResult(WinningLotto winningLotto) {
-        WinningResult result = new WinningResult();
-        lottos.forEach(lotto -> result.add(winningLotto.getRank(lotto)));
-        return result;
+        return new WinningResult(lottos.stream()
+                .collect(Collectors.groupingBy(winningLotto::getRank, Collectors.counting())));
+    }
+
+    public void merge(Lottos addedLottos) {
+        lottos.addAll(addedLottos.lottos);
     }
 
     public int getLottoCount() {

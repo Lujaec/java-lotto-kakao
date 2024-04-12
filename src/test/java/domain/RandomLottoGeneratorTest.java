@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class LottoGeneratorTest {
+public class RandomLottoGeneratorTest {
     @Test
     @DisplayName("로또생성기는 1부터 45까지, 6개의 서로다른 숫자로 이뤄진 로또 번호를 생성한다.")
     void lottoNumberTest() {

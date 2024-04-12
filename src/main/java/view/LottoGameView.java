@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import domain.EarningRate;
 import domain.Lotto;
@@ -21,17 +22,28 @@ public class LottoGameView {
         return Integer.parseInt(sc.nextLine());
     }
 
-    public List<LottoBall> getWinningLottoNumbers() {
-        System.out.println("지난 주 당첨 번호를 입력해 주세요.");
-        return Arrays.stream(sc.nextLine().split(LOTTO_SEPARATOR))
-            .map(Integer::parseInt)
-            .map(LottoBall::valueOf)
+    public int getManualLottoCount() {
+        System.out.println("\n수동으로 구매할 로또 수를 입력해 주세요.");
+        return Integer.parseInt(sc.nextLine());
+    }
+
+    public List<Lotto> getManualLottos(int count) {
+        System.out.println("\n수동으로 구매할 번호를 입력해 주세요.");
+        return IntStream.range(0, count)
+            .mapToObj(i -> sc.nextLine())
+            .map(numbers -> numbers.split(LOTTO_SEPARATOR))
+                    .map(Lotto::parseLotto)
             .collect(Collectors.toList());
+    }
+
+    public Lotto getWinningLottoNumbers() {
+        System.out.println("지난 주 당첨 번호를 입력해 주세요.");
+        return Lotto.parseLotto(sc.nextLine().split(LOTTO_SEPARATOR));
     }
 
     public int getBonusNumber() {
         System.out.println("보너스 볼을 입력해 주세요.");
-        return sc.nextInt();
+        return Integer.parseInt(sc.nextLine());
     }
 
     private void printLotto(Lotto lotto) {
@@ -42,8 +54,9 @@ public class LottoGameView {
             + "]");
     }
 
-    public void printPurchasedLottos(Lottos lottos) {
-        System.out.println(lottos.getLottoCount() + "개를 구매했습니다.");
+    public void printPurchasedLottos(int manualCount, Lottos lottos) {
+        int autoCount = lottos.getLottoCount() - manualCount;
+        System.out.println("\n수동으로 " + manualCount + "장, 자동으로 " + autoCount + "개를 구매했습니다.");
         lottos.getLottos().forEach(this::printLotto);
         System.out.println();
     }

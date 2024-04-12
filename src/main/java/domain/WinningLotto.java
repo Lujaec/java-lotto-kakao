@@ -1,7 +1,5 @@
 package domain;
 
-import java.util.List;
-
 public class WinningLotto {
     private final Lotto winnigLotto;
     private final LottoBall bonusNumber;
@@ -15,15 +13,8 @@ public class WinningLotto {
     }
 
     public Rank getRank(Lotto lotto) {
-        return Rank.findRank(countSameNumber(lotto), hasBonusNumber(lotto));
-    }
-
-    private int countSameNumber(Lotto lotto) {
-        List<LottoBall> targetLottoNumbers = lotto.getLottoNumbers();
-        return (int) targetLottoNumbers.stream().filter(winnigLotto::contains).count();
-    }
-
-    private boolean hasBonusNumber(Lotto lotto) {
-        return lotto.contains(bonusNumber);
+        int matchCount = lotto.getMatchCount(winnigLotto);
+        boolean matchBonus = lotto.contains(bonusNumber);
+        return Rank.findRank(matchCount, matchBonus);
     }
 }

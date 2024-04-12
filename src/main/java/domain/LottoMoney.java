@@ -6,8 +6,8 @@ public class LottoMoney {
     private final int lottoMoney;
 
     public LottoMoney(int money) {
-        if (money < 0) {
-            throw new IllegalArgumentException("돈은 0원 이상이어야 합니다!");
+        if (money < LOTTO_PRICE_UNIT) {
+            throw new IllegalArgumentException("돈은 1000원 이상이어야 합니다.");
         }
         this.lottoMoney = money;
     }

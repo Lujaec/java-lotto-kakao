@@ -1,22 +1,21 @@
 package domain;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.EnumMap;
 
 public class WinningResult {
     private final Map<Rank, Integer> winningResult;
-    private WinningMoney winningMoney;
+    private final WinningMoney winningMoney;
 
-    public WinningResult() {
-        winningResult = new HashMap<>();
-        winningMoney = new WinningMoney(WinningMoney.ZERO);
-        Arrays.stream(Rank.values()).forEach(rank -> winningResult.put(rank, 0));
-    }
-
-    public void add(Rank rank) {
-        this.winningResult.put(rank, getWinningCount(rank) + 1);
-        this.winningMoney = this.winningMoney.addWinningMoney(rank.getWinningMoney());
+    public WinningResult(Map<Rank, Long> winningCounts) {
+        this.winningResult = new EnumMap<>(Rank.class);
+        this.winningMoney = new WinningMoney(Arrays.stream(Rank.values())
+                .mapToLong(rank -> {
+                    int count = winningCounts.getOrDefault(rank, 0L).intValue();
+                    this.winningResult.put(rank, count);
+                    return count * rank.getWinningMoney().getMoney();
+                }).sum());
     }
 
     public EarningRate calculateEarningRate(LottoMoney lottoMoney) {

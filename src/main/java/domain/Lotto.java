@@ -1,9 +1,7 @@
 package domain;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Lotto {
     public static final int LOTTO_NUMBER_SIZE = 6;
@@ -16,10 +14,6 @@ public class Lotto {
 
         Collections.sort(lottoNumbers);
         this.lottoNumbers = lottoNumbers;
-    }
-
-    public List<LottoBall> getLottoNumbers() {
-        return lottoNumbers;
     }
 
     public boolean contains(LottoBall lottoNumber) {
@@ -38,5 +32,22 @@ public class Lotto {
         if (lottoNumbers.size() != LOTTO_NUMBER_SIZE) {
             throw new IllegalArgumentException("로또 번호는 6개로 이뤄져야 합니다!");
         }
+    }
+
+    public int getMatchCount(Lotto compareLotto) {
+        return (int) lottoNumbers.stream().filter(compareLotto::contains).count();
+    }
+
+    public List<LottoBall> getLottoNumbers() {
+        return lottoNumbers;
+    }
+
+    public static Lotto parseLotto(String[] lines) {
+        List<LottoBall> lottoBalls = Arrays.stream(lines)
+                .map(Integer::parseInt)
+                .map(LottoBall::valueOf)
+                .collect(Collectors.toList());
+
+        return new Lotto(lottoBalls);
     }
 }
