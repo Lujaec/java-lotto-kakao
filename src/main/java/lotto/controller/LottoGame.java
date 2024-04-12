@@ -2,6 +2,8 @@ package lotto.controller;
 
 import lotto.model.*;
 
+import java.util.List;
+
 public class LottoGame {
     private final LottoMachine lottoMachine;
 
@@ -9,8 +11,12 @@ public class LottoGame {
         this.lottoMachine = lottoMachine;
     }
 
-    public LottoTickets buy(int purchaseAmount) {
-        return lottoMachine.buy(new PurchaseAmount(purchaseAmount));
+    public LottoTickets buy(long purchaseAmount) {
+        return lottoMachine.buy(new Balance(purchaseAmount));
+    }
+
+    public LottoTickets buy(List<LottoTicket> lottoTickets) {
+        return lottoMachine.buy(lottoTickets);
     }
 
     public LottoWinningNumbers raffle(String lottos, int bonus) {

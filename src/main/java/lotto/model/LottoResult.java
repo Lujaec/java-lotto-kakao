@@ -7,11 +7,11 @@ import java.util.Objects;
 
 public class LottoResult {
     private final List<LottoRank> lottoRanks;
-    private final PurchaseAmount totalPurchaseAmount;
+    private final Balance totalBalance;
 
-    public LottoResult(List<LottoRank> lottoRanks, PurchaseAmount totalPurchaseAmount) {
+    public LottoResult(List<LottoRank> lottoRanks, Balance totalBalance) {
         this.lottoRanks = lottoRanks;
-        this.totalPurchaseAmount = totalPurchaseAmount;
+        this.totalBalance = totalBalance;
     }
 
     public long calculateTotalPrize() {
@@ -21,7 +21,7 @@ public class LottoResult {
     }
 
     public float calculateReturnRate() {
-        return (float) calculateTotalPrize() / totalPurchaseAmount.getPurchaseAmount();
+        return (float) calculateTotalPrize() / totalBalance.getBalance();
     }
 
     public Map<LottoRank, Integer> produceStatics() {
@@ -45,11 +45,11 @@ public class LottoResult {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LottoResult that = (LottoResult) o;
-        return Objects.equals(lottoRanks, that.lottoRanks) && Objects.equals(totalPurchaseAmount, that.totalPurchaseAmount);
+        return Objects.equals(lottoRanks, that.lottoRanks) && Objects.equals(totalBalance, that.totalBalance);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lottoRanks, totalPurchaseAmount);
+        return Objects.hash(lottoRanks, totalBalance);
     }
 }

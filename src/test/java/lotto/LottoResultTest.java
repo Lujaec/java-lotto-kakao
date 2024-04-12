@@ -2,7 +2,7 @@ package lotto;
 
 import lotto.model.LottoRank;
 import lotto.model.LottoResult;
-import lotto.model.PurchaseAmount;
+import lotto.model.Balance;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,15 +25,15 @@ public class LottoResultTest {
                 LottoRank.FIFTH
         );
 
-        Assertions.assertDoesNotThrow(() -> new LottoResult(ranks, new PurchaseAmount(14_000L)));
+        Assertions.assertDoesNotThrow(() -> new LottoResult(ranks, new Balance(14_000L)));
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {0, -1})
-    void 구매금액이_0이하면_예외를_던진다(long purchaseAmount) {
+    @ValueSource(longs = {-1, -1000})
+    void 구매금액이_0_미만이면_예외를_던진다(long purchaseAmount) {
         List<LottoRank> ranks = List.of(LottoRank.FIRST);
 
-        assertThatThrownBy(() -> new LottoResult(ranks, new PurchaseAmount(purchaseAmount)))
+        assertThatThrownBy(() -> new LottoResult(ranks, new Balance(purchaseAmount)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -45,7 +45,7 @@ public class LottoResultTest {
                 LottoRank.FIRST,
                 LottoRank.SECOND
         );
-        LottoResult result = new LottoResult(ranks, new PurchaseAmount(14_000L));
+        LottoResult result = new LottoResult(ranks, new Balance(14_000L));
         assertThat(result.calculateTotalPrize()).isEqualTo(4_030_000_000L);
     }
 
@@ -56,7 +56,7 @@ public class LottoResultTest {
                 LottoRank.FIRST,
                 LottoRank.SECOND
         );
-        LottoResult result = new LottoResult(ranks, new PurchaseAmount(10_000L));
+        LottoResult result = new LottoResult(ranks, new Balance(10_000L));
         assertThat(result.calculateReturnRate()).isEqualTo(403_000L);
     }
 }

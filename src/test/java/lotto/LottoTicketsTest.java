@@ -4,6 +4,7 @@ import lotto.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -66,6 +67,27 @@ public class LottoTicketsTest {
         ));
 
         assertThat(lottoTickets.getWinningResult(lottoWinningNumbers))
-                .isEqualTo(new LottoResult(List.of(LottoRank.FIRST, LottoRank.SECOND), new PurchaseAmount(2 * LottoTicket.PRICE)));
+                .isEqualTo(new LottoResult(List.of(LottoRank.FIRST, LottoRank.SECOND), new Balance(2 * LottoTicket.PRICE)));
+    }
+
+    @Test
+    void 로또_티켓들을_추가한다() {
+        LottoTickets basicTickets = new LottoTickets(List.of(createLottoTicket(List.of(1, 2, 3, 4, 5, 6))));
+        LottoTickets additionalTickets = new LottoTickets(List.of(createLottoTicket(List.of(7, 8, 9, 10, 11, 12))));
+
+        basicTickets.addAll(additionalTickets);
+
+        assertThat(basicTickets.getLottoTickets())
+                .extracting(LottoTicket::getLottoNumbers)
+                .containsAll(List.of(
+                        createLottoTicket(List.of(1, 2, 3, 4, 5, 6)).getLottoNumbers(),
+                        createLottoTicket(List.of(7, 8, 9, 10, 11, 12)).getLottoNumbers())
+                );
+    }
+
+    private LottoTicket createLottoTicket(List<Integer> lottoNumbers) {
+        return new LottoTicket(lottoNumbers.stream()
+                .map(LottoNumber::new)
+                .collect(Collectors.toList()));
     }
 }

@@ -10,8 +10,8 @@ public class LottoMachine {
         this.generator = generator;
     }
 
-    public LottoTickets buy(PurchaseAmount purchaseAmount) {
-        int purchaseTicket = calculatePurchaseTicket(purchaseAmount);
+    public LottoTickets buy(Balance balance) {
+        long purchaseTicket = calculatePurchaseTicket(balance);
 
         List<LottoTicket> lottoTicketList = new ArrayList<>();
         for (int i = 0; i < purchaseTicket; i++) {
@@ -21,7 +21,11 @@ public class LottoMachine {
         return new LottoTickets(lottoTicketList);
     }
 
-    private int calculatePurchaseTicket(PurchaseAmount purchaseAmount) {
-        return (int) purchaseAmount.getPurchaseAmount() / LottoTicket.PRICE;
+    public LottoTickets buy(List<LottoTicket> lottoTickets) {
+        return new LottoTickets(lottoTickets);
+    }
+
+    private long calculatePurchaseTicket(Balance balance) {
+        return balance.getBalance() / LottoTicket.PRICE;
     }
 }
