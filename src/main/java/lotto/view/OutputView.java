@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class OutputView {
 
-    private static final String PURCHASE_COUNT_MESSAGE = "개를 구매했습니다.";
     private static final String JOIN_DELIMITER = ", ";
     private static final String GAME_RESULT_ANNOUNCE_MESSAGE = "당첨 통계\n---------";
     private static final String FIFTH = "FIFTH";
@@ -16,8 +15,8 @@ public class OutputView {
     private static final String SECOND = "SECOND";
     private static final String FIRST = "FIRST";
     private static final String COUNT_MESSAGE = "개";
-    private static final String FIFTH_MESSAGE = "3개 일 (5000)- ";
-    private static final String FOURTH_MESSAGE = "4개 일 (50000)- ";
+    private static final String FIFTH_MESSAGE = "3개 일치 (5000)- ";
+    private static final String FOURTH_MESSAGE = "4개 일치 (50000)- ";
     private static final String THIRD_MESSAGE = "5개 일치 (1500000원)- ";
     private static final String SECOND_MESSAGE = "5개 일치, 보너스 볼 일치(30000000원) - ";
     private static final String TOTAL_REVENUE_MESSAGE = "총 수익률은 ";
@@ -27,12 +26,9 @@ public class OutputView {
     private OutputView() {
     }
 
-    public static void printPurchaseCount(final int purchaseCount) {
-        System.out.println(purchaseCount + PURCHASE_COUNT_MESSAGE);
-    }
-
-    public static void printLottoGroups(final LottoGroupDTOs lottoGroupDtos) {
-        lottoGroupDtos.getValues()
+    public static void printLottoGroups(final int manualCount, final int autoCount, final LottoGroupDTOs lottoGroupDTOs) {
+        System.out.println("수동으로 " + manualCount + "장, 자동으로 " + autoCount + "개를 구매했습니다.");
+        lottoGroupDTOs.getValues()
                 .forEach(lottoGroupDto -> System.out.println(String.join(JOIN_DELIMITER, lottoGroupDto.getNumbers().toString())));
         System.out.println();
     }

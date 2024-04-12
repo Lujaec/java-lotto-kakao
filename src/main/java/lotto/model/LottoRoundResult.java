@@ -1,6 +1,6 @@
 package lotto.model;
 
-import java.math.BigInteger;
+import lotto.model.vo.WinningMoney;
 
 public enum LottoRoundResult {
 
@@ -16,10 +16,10 @@ public enum LottoRoundResult {
     private static final int FIVE = 5;
     private static final int SIX = 6;
 
-    private final BigInteger price;
+    private final WinningMoney winningMoney;
 
-    LottoRoundResult(final int price) {
-        this.price = BigInteger.valueOf(price);
+    LottoRoundResult(final int winningMoney) {
+        this.winningMoney = new WinningMoney(winningMoney);
     }
 
     public static LottoRoundResult makeRoundResult(final int count, final boolean bonusMatch) {
@@ -29,10 +29,10 @@ public enum LottoRoundResult {
         if (count == FOUR) {
             return LottoRoundResult.FOURTH;
         }
-        if (count == FIVE) {
+        if (count == FIVE && !bonusMatch) {
             return LottoRoundResult.THIRD;
         }
-        if (count == SIX && bonusMatch) {
+        if (count == FIVE) {
             return LottoRoundResult.SECOND;
         }
         if (count == SIX) {
@@ -41,7 +41,7 @@ public enum LottoRoundResult {
         return LottoRoundResult.BOOM;
     }
 
-    public BigInteger getPrice() {
-        return price;
+    public WinningMoney getWinningMoney() {
+        return winningMoney;
     }
 }

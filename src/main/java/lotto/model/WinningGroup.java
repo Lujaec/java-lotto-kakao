@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 public class WinningGroup {
 
     private static final String DUPLICATED_BONUS_BALL_MESSAGE = "로또 그룹에 속한 볼과 보너스 볼은 중복될 수 없습니다.";
-    private static final int ONE = 1;
     private static final String SPLIT_REGEX = ", ";
 
     private final LottoGroup lottoGroup;
@@ -25,7 +24,7 @@ public class WinningGroup {
         this(new LottoGroup(Arrays.stream(winningNumbers.split(SPLIT_REGEX))
                         .map(Integer::parseInt)
                         .collect(Collectors.toUnmodifiableList())),
-                new LottoBall(bonusNumber));
+                LottoBallFactory.getLottoBall(bonusNumber));
     }
 
     private void validateDuplicate(final LottoGroup lottoGroup, final LottoBall bonusBall) {
@@ -35,15 +34,6 @@ public class WinningGroup {
     }
 
     public LottoRoundResult calculateRoundResult(final LottoGroup otherLottoGroup) {
-        final int matchCount = otherLottoGroup.countMatch(lottoGroup);
-        final boolean bonusMatch = otherLottoGroup.containsBall(bonusBall);
-        return LottoRoundResult.makeRoundResult(totalMatchCount(matchCount, bonusMatch), bonusMatch);
-    }
-
-    private int totalMatchCount(final int matchCount, final boolean bonusMatch) {
-        if (bonusMatch) {
-            return matchCount + ONE;
-        }
-        return matchCount;
+        return LottoRoundResult.makeRoundResult(otherLottoGroup.countMatch(lottoGroup), otherLottoGroup.containsBall(bonusBall));
     }
 }

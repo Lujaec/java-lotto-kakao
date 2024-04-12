@@ -1,5 +1,6 @@
 package lotto.model.vo;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -10,9 +11,17 @@ public class WinningMoney {
 
     private final BigInteger amount;
 
-    public WinningMoney(final BigInteger amount) {
+    private WinningMoney(final BigInteger amount) {
         validateAmount(amount);
         this.amount = amount;
+    }
+
+    public WinningMoney(final int amount) {
+        this(BigInteger.valueOf(amount));
+    }
+
+    public WinningMoney(final String amount) {
+        this(new BigInteger(amount));
     }
 
     private void validateAmount(final BigInteger amount) {
@@ -23,6 +32,18 @@ public class WinningMoney {
 
     private boolean isNegativeAmount(final BigInteger amount) {
         return amount.compareTo(BigInteger.ZERO) < ZERO;
+    }
+
+    public WinningMoney add(WinningMoney winningMoney) {
+        return new WinningMoney(amount.add(winningMoney.amount));
+    }
+
+    public WinningMoney multiply(BigDecimal bigDecimal) {
+        return new WinningMoney(amount.multiply(bigDecimal.toBigInteger()));
+    }
+
+    public BigInteger getAmount() {
+        return amount;
     }
 
     @Override

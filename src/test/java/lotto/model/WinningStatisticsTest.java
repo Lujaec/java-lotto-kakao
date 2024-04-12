@@ -3,7 +3,8 @@ package lotto.model;
 import lotto.model.vo.RevenueRate;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static lotto.model.LottoRoundResult.BOOM;
 import static lotto.model.LottoRoundResult.FIFTH;
@@ -16,13 +17,13 @@ class WinningStatisticsTest {
 
     @Test
     void 게임_결과의_개수가_0초과이면_잘_생성된다() {
-        assertDoesNotThrow(() -> new WinningStatistics(List.of(BOOM, FIFTH)));
+        assertDoesNotThrow(() -> new WinningStatistics(Map.of(BOOM, 1, FIFTH, 1)));
     }
 
     @Test
     void 게임_결과의_개수가_0이면_예외_처리한다() {
         // given
-        final List<LottoRoundResult> emptyResults = List.of();
+        final Map<LottoRoundResult, Integer> emptyResults = new HashMap<>();
 
         // when & then
         assertThatThrownBy(() -> new WinningStatistics(emptyResults))
@@ -33,7 +34,7 @@ class WinningStatisticsTest {
     @Test
     void 수익률을_계산할_수_있다() {
         // given
-        final WinningStatistics winningStatistics = new WinningStatistics(List.of(BOOM, BOOM, FIFTH));
+        final WinningStatistics winningStatistics = new WinningStatistics(Map.of(BOOM, 2, FIFTH, 1));
         final RevenueRate expectedRevenue = new RevenueRate(1.67);
 
         // when

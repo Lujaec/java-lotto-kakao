@@ -2,8 +2,8 @@ package lotto.model;
 
 import lotto.model.vo.LottoBall;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class LottoGroup {
@@ -13,15 +13,16 @@ public class LottoGroup {
     private static final String DUPLICATED_BALLS_MESSAGE = "로또 그룹에서 볼은 중복될 수 없습니다.";
     private static final int ONE = 1;
 
-    private final List<LottoBall> balls;
+    private final Set<LottoBall> balls;
 
     public LottoGroup(final List<Integer> numbers) {
         validateNumbersSize(numbers);
-        validateDuplicateBalls(numbers);
 
         this.balls = numbers.stream()
-                .map(LottoBall::new)
-                .collect(Collectors.toUnmodifiableList());
+                .map(LottoBallFactory::getLottoBall)
+                .collect(Collectors.toUnmodifiableSet());
+
+        validateDuplicateBalls();
     }
 
     private void validateNumbersSize(final List<Integer> numbers) {
@@ -30,14 +31,10 @@ public class LottoGroup {
         }
     }
 
-    private void validateDuplicateBalls(final List<Integer> numbers) {
-        if (removedDuplicatedSize(numbers) != numbers.size()) {
+    private void validateDuplicateBalls() {
+        if (balls.size() != BALLS_SIZE) {
             throw new IllegalArgumentException(DUPLICATED_BALLS_MESSAGE);
         }
-    }
-
-    private int removedDuplicatedSize(final List<Integer> numbers) {
-        return new HashSet<>(numbers).size();
     }
 
     public boolean containsBall(final LottoBall ball) {
