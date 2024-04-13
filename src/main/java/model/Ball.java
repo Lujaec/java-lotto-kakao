@@ -14,6 +14,7 @@ public class Ball {
         validateNumberRange(ball);
         this.ball = ball;
     }
+
     public String toString() {
         return Integer.toString(ball);
     }

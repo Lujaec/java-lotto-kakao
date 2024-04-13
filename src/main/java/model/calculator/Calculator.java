@@ -23,11 +23,11 @@ public class Calculator {
 
     public void saveRanking(Lottery lottery) {
         lottoResultList = lottoResultList
-            .stream().map(
-                lottoResult -> {
-                    lottoResult.saveRanking(lottery);
-                    return lottoResult;
-                }).collect(toList());
+                .stream().map(
+                        lottoResult -> {
+                            lottoResult.saveRanking(lottery);
+                            return lottoResult;
+                        }).collect(toList());
 
         calculateRankingCount();
     }
@@ -47,10 +47,10 @@ public class Calculator {
 
     void calculateRankingCount() {
         lottoResultList.forEach(
-            lottoResult -> {
-                Ranking ranking = lottoResult.getRanking();
-                rankingCountMap.put(ranking, rankingCountMap.get(ranking) + 1);
-            }
+                lottoResult -> {
+                    Ranking ranking = lottoResult.getRanking();
+                    rankingCountMap.put(ranking, rankingCountMap.get(ranking) + 1);
+                }
         );
     }
 
@@ -62,7 +62,7 @@ public class Calculator {
     private Map<Ranking, Integer> initMap() {
         rankingCountMap = new EnumMap<>(Ranking.class);
         asList(Ranking.values()).forEach(
-            ranking -> rankingCountMap.put(ranking, 0)
+                ranking -> rankingCountMap.put(ranking, 0)
         );
         return rankingCountMap;
     }
@@ -73,16 +73,16 @@ public class Calculator {
 
     private long totalSum() {
         return rankingCountMap.entrySet()
-            .stream()
-            .mapToLong(entry -> (long) entry.getKey().getReward() * entry.getValue())
-            .sum();
+                .stream()
+                .mapToLong(entry -> (long) entry.getKey().getReward() * entry.getValue())
+                .sum();
     }
 
     private long purchaseAmount() {
         return rankingCountMap.values()
-            .stream()
-            .mapToInt(count -> LOTTO_UNIT_PRICE * count)
-            .sum();
+                .stream()
+                .mapToInt(count -> LOTTO_UNIT_PRICE * count)
+                .sum();
     }
 
     private double divideAndRound(double num) {

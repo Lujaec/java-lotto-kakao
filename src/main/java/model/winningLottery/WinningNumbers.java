@@ -21,40 +21,36 @@ public class WinningNumbers {
 
     public int matchCount(LottoNumbers lottoNumbers) {
         return lottoNumbers.getLottoNumbers()
-            .stream()
-            .mapToInt(
-                this::numberMatch
-            ).sum();
+                .stream()
+                .filter(Objects::nonNull)
+                .mapToInt(
+                        this::numberMatch
+                ).sum();
     }
 
     private int numberMatch(Ball lottoNumber) {
-        if (winningNumbers.contains(lottoNumber)){
+        if (winningNumbers.contains(lottoNumber)) {
             return 1;
         }
-
         return 0;
     }
 
-    public static WinningNumbers createWinningNumbers(String winningNumberStr) {
-        int[] numbers = stream(winningNumberStr.split(","))
-            .mapToInt(Integer::parseInt)
-            .toArray();
-
-        Set<Ball> winningNumberSet = Arrays.stream(winningNumberStr.split(","))
+    public static WinningNumbers createBallNumbers(String ballNumberStr) {
+        Set<Ball> ballNumberSet = Arrays.stream(ballNumberStr.split(","))
                 .map(Integer::parseInt)
                 .map(Ball::new)
                 .collect(Collectors.toSet());
 
-        validate(winningNumberSet);
+        validateBall(ballNumberSet);
 
-        return new WinningNumbers(winningNumberSet);
+        return new WinningNumbers(ballNumberSet);
     }
 
     public Set<Ball> getWinningNumbers() {
         return winningNumbers;
     }
 
-    private static void validate(Set<Ball> winningNumberSet) {
+    public static void validateBall(Set<Ball> winningNumberSet) {
         validateUniqueNumberCount(winningNumberSet);
     }
 
@@ -63,7 +59,6 @@ public class WinningNumbers {
             throw new IllegalArgumentException(String.format("서로 다른 %d개 숫자를 입력해주세요", NUMBER_COUNT));
         }
     }
-
 
     @Override
     public boolean equals(Object o) {

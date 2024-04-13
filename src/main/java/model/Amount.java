@@ -3,35 +3,35 @@ package model;
 public class Amount {
     public static final int LOTTO_UNIT_PRICE = 1000;
 
-    private final int cost;
+    private final int amount;
 
-    private Amount(int cost) {
-        this.cost = cost;
+    private Amount(int amount) {
+        this.amount = amount;
     }
 
-    public static Amount costInput(int cost) {
-        validate(cost);
-        return new Amount(cost);
+    public static Amount amountInput(int amount) {
+        validateBudget(amount);
+        return new Amount(amount);
     }
 
-    private static void validate(int cost) {
-        validateProperCostUnit(cost);
-        validatePositiveCost(cost);
+    private static void validateBudget(int amount) {
+        validateProperAmountUnit(amount);
+        validatePositiveAmount(amount);
     }
 
-    private static void validateProperCostUnit(int cost) {
-        if (cost % 1000 != 0) {
+    private static void validateProperAmountUnit(int amount) {
+        if (amount > 0 && amount % 1000 != 0) {
             throw new IllegalArgumentException("1000원 단위로 입력해주세요.");
         }
     }
 
-    private static void validatePositiveCost(int cost) {
-        if (cost <= 0) {
-            throw new IllegalArgumentException("1000원 이상의 금액을 입력해주세요.");
+    private static void validatePositiveAmount(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("1000원 이상의 구입금액을 입력해주세요.");
         }
     }
 
-    public int getCost() {
-        return cost;
+    public int getAmount() {
+        return amount;
     }
 }

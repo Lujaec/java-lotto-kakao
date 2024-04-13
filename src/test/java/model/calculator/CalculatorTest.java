@@ -24,10 +24,10 @@ class CalculatorTest {
 
     @Test
     void 로또번호들을_저장한다() {
-        LottoNumbers lottoNumbersFirst = new LottoNumbers(createBallSet(Set.of(1,2,3,4,5,6)));
+        LottoNumbers lottoNumbersFirst = new LottoNumbers(createBallSet(Set.of(1, 2, 3, 4, 5, 6)));
         LottoResult firstOne = new LottoResult(lottoNumbersFirst);
 
-        WinningNumbers winningNumbers = new WinningNumbers(createBallSet(Set.of(1,2,3,4,5,6)));
+        WinningNumbers winningNumbers = new WinningNumbers(createBallSet(Set.of(1, 2, 3, 4, 5, 6)));
         WinningBonusNumber bonusNumber = new WinningBonusNumber(new Ball(7));
 
         Lottery lottery = new Lottery(winningNumbers, bonusNumber);
@@ -50,14 +50,14 @@ class CalculatorTest {
 
     @Test()
     void 각_등수를_가진_로또번호들의_갯수를구한다() {
-        LottoNumbers lottoNumbersFirst = new LottoNumbers(createBallSet(Set.of(1,2,3,4,5,6)));
-        LottoNumbers lottoNumbersSecond = new LottoNumbers(createBallSet(Set.of(1,2,3,4,5,7)));
+        LottoNumbers lottoNumbersFirst = new LottoNumbers(createBallSet(Set.of(1, 2, 3, 4, 5, 6)));
+        LottoNumbers lottoNumbersSecond = new LottoNumbers(createBallSet(Set.of(1, 2, 3, 4, 5, 7)));
 
         LottoResult firstOne = new LottoResult(lottoNumbersFirst);
         LottoResult firstTwo = new LottoResult(lottoNumbersFirst);
         LottoResult secondOne = new LottoResult(lottoNumbersSecond);
 
-        WinningNumbers winningNumbers = new WinningNumbers(createBallSet(Set.of(1,2,3,4,5,6)));
+        WinningNumbers winningNumbers = new WinningNumbers(createBallSet(Set.of(1, 2, 3, 4, 5, 6)));
         WinningBonusNumber bonusNumber = new WinningBonusNumber(new Ball(7));
 
         Lottery lottery = new Lottery(winningNumbers, bonusNumber);
@@ -85,14 +85,14 @@ class CalculatorTest {
     @Test()
     void 각_등수를_통해_전체_수익률을_구한다() {
         //given
-        LottoNumbers lottoNumbersFirst = new LottoNumbers(createBallSet(Set.of(1,2,3,4,5,6)));
-        LottoNumbers lottoNumbersSecond = new LottoNumbers(createBallSet(Set.of(1,2,3,4,5,7)));
+        LottoNumbers lottoNumbersFirst = new LottoNumbers(createBallSet(Set.of(1, 2, 3, 4, 5, 6)));
+        LottoNumbers lottoNumbersSecond = new LottoNumbers(createBallSet(Set.of(1, 2, 3, 4, 5, 7)));
 
         LottoResult firstOne = new LottoResult(lottoNumbersFirst);
         LottoResult firstTwo = new LottoResult(lottoNumbersFirst);
         LottoResult secondOne = new LottoResult(lottoNumbersSecond);
 
-        WinningNumbers winningNumbers = new WinningNumbers(createBallSet(Set.of(1,2,3,4,5,6)));
+        WinningNumbers winningNumbers = new WinningNumbers(createBallSet(Set.of(1, 2, 3, 4, 5, 6)));
         WinningBonusNumber bonusNumber = new WinningBonusNumber(new Ball(7));
 
         Lottery lottery = new Lottery(winningNumbers, bonusNumber);
