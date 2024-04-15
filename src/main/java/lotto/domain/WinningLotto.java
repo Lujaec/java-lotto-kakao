@@ -1,6 +1,9 @@
 package lotto.domain;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class WinningLotto {
 
@@ -18,9 +21,16 @@ public class WinningLotto {
     }
 
     public Prize calculatePrize(LottoTicket ticket) {
-        int matchCount = winningTicket.compare(ticket);
+        int matchCount = winningTicket.countMatchedNumbers(ticket);
         boolean isBonusNumberMatched = ticket.contains(bonusNumber);
         return Prize.evaluate(matchCount, isBonusNumberMatched);
+    }
+
+    public LottoResult aggregateResult(LottoTickets tickets) {
+        Map<Prize, Long> result = tickets.stream()
+                .map(this::calculatePrize)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        return new LottoResult(result);
     }
 
     private void validateWinningNumber(LottoTicket winningTicket, LottoNumber bonusLottoNumber) {

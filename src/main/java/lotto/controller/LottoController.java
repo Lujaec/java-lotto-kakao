@@ -5,26 +5,30 @@ import java.util.stream.Collectors;
 
 import lotto.domain.*;
 import lotto.dto.LottoResultDto;
+import lotto.dto.PrizeResultDto;
 import lotto.dto.TicketDto;
 import lotto.view.LottoView;
 
+import static lotto.domain.Prize.SECOND;
+
 public class LottoController {
-    private final LottoTicketSeller seller;
     private final LottoView view;
 
     public LottoController() {
-        this.seller = new LottoTicketSeller();
         this.view = new LottoView();
     }
 
     public void start() {
         LottoPurchaseBudget budget = getBudget();
-        List<LottoTicket> tickets = seller.generateTickets(budget);
+        int manualLottoCount = getManualLottoCount(budget);
 
-        view.printTickets(mapToTicketDto(tickets));
+        LottoTickets manualTickets = getManualLottoTickets(manualLottoCount, budget);
+        LottoTickets autoTickets = LottoTicketSeller.purchaseAutoLottoTickets(budget);
+        LottoTickets totalTickets = manualTickets.addAll(autoTickets);
+        view.printTickets(mapToTicketDtos(totalTickets));
 
         WinningLotto winningLotto = getWinningLotto();
-        LottoResult lottoResult = new LottoResult(winningLotto, tickets);
+        LottoResult lottoResult = winningLotto.aggregateResult(totalTickets);
 
         view.printLottoResult(mapToResultDto(lottoResult, budget));
     }
@@ -35,6 +39,27 @@ public class LottoController {
         } catch (RuntimeException e) {
             view.printError(e);
             return getBudget();
+        }
+    }
+
+    private int getManualLottoCount(LottoPurchaseBudget budget) {
+        try {
+            int manualLottoCount = view.getManualLottoCount();
+            budget.validatePurchasable(manualLottoCount);
+            return manualLottoCount;
+        } catch (RuntimeException e) {
+            view.printError(e);
+            return getManualLottoCount(budget);
+        }
+    }
+
+    private LottoTickets getManualLottoTickets(int manualLottoCount, LottoPurchaseBudget budget) {
+        try {
+            List<List<Integer>> manualLottoNumbers = view.getManualLottoNumbers(manualLottoCount);
+            return LottoTicketSeller.purchaseManualLottoTickets(manualLottoNumbers, budget);
+        } catch (RuntimeException e) {
+            view.printError(e);
+            return getManualLottoTickets(manualLottoCount, budget);
         }
     }
 
@@ -54,27 +79,36 @@ public class LottoController {
         }
     }
 
-    private List<TicketDto> mapToTicketDto(List<LottoTicket> tickets) {
-        List<TicketDto> ticketDtos = new ArrayList<>();
-        for (LottoTicket ticket : tickets) {
-            List<Integer> numbers = ticket.toList().stream()
-                    .map(LottoNumber::getValue)
-                    .collect(Collectors.toList());
+    private List<TicketDto> mapToTicketDtos(LottoTickets tickets) {
+        return tickets.stream()
+                .map(LottoTicket::toList)
+                .map(LottoController::mapToTicketDto)
+                .collect(Collectors.toList());
+    }
 
-            ticketDtos.add(new TicketDto(numbers));
-        }
-        return ticketDtos;
+    private static TicketDto mapToTicketDto(List<LottoNumber> lottoNumbers) {
+        return lottoNumbers.stream()
+                .map(LottoNumber::getValue)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), TicketDto::new));
     }
 
     private LottoResultDto mapToResultDto(LottoResult lottoResult, LottoPurchaseBudget budget) {
         Map<Prize, Long> result = lottoResult.getResult();
 
-        Map<String, Long> totalResult = new LinkedHashMap<>();
-        Arrays.stream(Prize.values())
+        List<PrizeResultDto> resultDtos = Arrays.stream(Prize.values())
                 .filter(prize -> prize != Prize.NOTHING)
-                .sorted((a, b) -> b.getOrder() - a.getOrder())
-                .forEach(prize -> totalResult.put(prize.toString(), result.getOrDefault(prize, 0L)));
+                .sorted(Comparator.comparingInt(Prize::getOrder).reversed())
+                .map(prize -> mapToPrizeResultDto(prize, result))
+                .collect(Collectors.toList());
 
-        return new LottoResultDto(totalResult, lottoResult.getProfitRate(budget));
+        return new LottoResultDto(resultDtos, lottoResult.getProfitRate(budget));
+    }
+
+    private static PrizeResultDto mapToPrizeResultDto(Prize prize, Map<Prize, Long> result) {
+        return new PrizeResultDto(
+                prize.getMatchCount(),
+                prize.equals(SECOND),
+                prize.getReward(),
+                result.getOrDefault(prize, 0L));
     }
 }

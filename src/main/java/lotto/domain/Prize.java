@@ -1,12 +1,14 @@
 package lotto.domain;
 
+import java.util.Arrays;
+
 public enum Prize {
-    NOTHING(0L, 2, 999 ),
-    FIFTH(5000L, 3, 5),
-    FOURTH(50000L, 4, 4),
-    THIRD(1500000L, 5, 3),
-    SECOND(30000000L, 5, 2),
-    FIRST(2000000000L, 6, 1);
+    NOTHING(0L, 2, 999),
+    FIFTH(5_000L, 3, 5),
+    FOURTH(50_000L, 4, 4),
+    THIRD(1_500_000L, 5, 3),
+    SECOND(30_000_000L, 5, 2),
+    FIRST(2_000_000_000L, 6, 1);
 
     private final Long reward;
     private final int matchCount;
@@ -26,27 +28,24 @@ public enum Prize {
         return order;
     }
 
-    public static Prize evaluate(int matchCount, boolean isBonusNumberMatched) {
-        if (matchCount <= 2) {
-            return NOTHING;
-        }
-        if (matchCount == 3) {
-            return FIFTH;
-        }
-        if (matchCount == 4) {
-            return FOURTH;
-        }
-        if (matchCount == 5) {
-            return evaluate(isBonusNumberMatched);
-        }
-        return FIRST;
+    public Long getReward() {
+        return reward;
     }
 
-    private static Prize evaluate(boolean isBonusNumberMatched) {
-        if (isBonusNumberMatched) {
+    public int getMatchCount() {
+        return matchCount;
+    }
+
+    public static Prize evaluate(int matchCount, boolean isBonusNumberMatched) {
+
+        if (isBonusNumberMatched && matchCount == SECOND.matchCount) {
             return SECOND;
         }
-        return THIRD;
+
+        return Arrays.stream(values())
+                .filter(prize -> prize.matchCount == matchCount)
+                .findAny()
+                .orElse(NOTHING);
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 public class LottoTicket {
 
     private static final int LOTTO_NUMBERS_COUNT = 6;
+
     private final Set<LottoNumber> lottoNumbers;
 
     public LottoTicket(Set<LottoNumber> lottoNumbers) {
@@ -17,10 +18,18 @@ public class LottoTicket {
         this(new HashSet<>(lottoNumbers));
     }
 
-    public int compare (LottoTicket otherNumbers) {
+    public static LottoTicket of(List<Integer> lottoNumbers) {
+        List<LottoNumber> ticketNumbers = lottoNumbers.stream()
+                .map(LottoNumber::valueOf)
+                .collect(Collectors.toList());
+
+        return new LottoTicket(ticketNumbers);
+    }
+
+    public int countMatchedNumbers(LottoTicket otherNumbers) {
         return (int) lottoNumbers.stream()
-            .filter(otherNumbers::contains)
-            .count();
+                .filter(otherNumbers::contains)
+                .count();
     }
 
     public boolean contains(LottoNumber lottoNumber) {
