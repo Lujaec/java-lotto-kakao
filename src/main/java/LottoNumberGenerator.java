@@ -11,8 +11,9 @@ public class LottoNumberGenerator implements NumberGenerator {
     private static final int MIN_VALUE = 1;
     private static final int MAX_VALUE = 45;
     private static final int NUMBER_SIZE = 6;
-    private static final List<Integer> NUMBERS_LIST = IntStream.rangeClosed(MIN_VALUE, MAX_VALUE)
+    private List<LottoNumber> NUMBERS_LIST = IntStream.rangeClosed(MIN_VALUE, MAX_VALUE)
             .boxed()
+            .map(LottoNumber::new)
             .collect(Collectors.toList());
 
     @Override
@@ -20,6 +21,7 @@ public class LottoNumberGenerator implements NumberGenerator {
 
         Collections.shuffle(NUMBERS_LIST);
 
-        return NUMBERS_LIST.subList(0, NUMBER_SIZE).stream().map(LottoNumber::new).collect(Collectors.toList());
+        return NUMBERS_LIST.subList(0, NUMBER_SIZE).stream()
+                .collect(Collectors.toUnmodifiableList());
     }
 }

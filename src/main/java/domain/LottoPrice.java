@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Arrays;
+
 public enum LottoPrice {
     FIRST(6, false, 2_000_000_000),
     SECOND(5, true, 30_000_000),
@@ -20,12 +22,17 @@ public enum LottoPrice {
         this.price = price;
     }
 
-    public boolean matchPrice(long count, boolean bonus) {
+    public static LottoPrice matchRank(long count, boolean bonus) {
         if (count == BONUS_RANK) {
-            return this.count == count && this.bonus == bonus;
+            return Arrays.stream(values())
+                    .filter(rank -> rank.count == count && rank.bonus == bonus)
+                    .findFirst()
+                    .orElse(NOTHING);
         }
 
-        return this.count == count;
+        return Arrays.stream(values())
+                .filter(rank -> rank.count == count)
+                .findFirst().orElse(NOTHING);
     }
 
     public int getPrice() {

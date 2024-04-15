@@ -1,5 +1,6 @@
 import domain.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,9 +38,33 @@ public class LottoMain {
         inputView.inputString();
 
         LottoStore lottoStore = new LottoStore(money);
-        outputView.printLottoCount(lottoStore.getLottoCount());
 
-        return lottoStore.getLottoTickets(new LottoNumberGenerator());
+        int manualCount = getManualCount(lottoStore);
+        List<String> manualList = getManualLottos(manualCount);
+
+        outputView.printLottoCount(manualCount, lottoStore.getLottoCount() - manualCount);
+
+        return lottoStore.buyLottoTickets(new LottoNumberGenerator(), manualList);
+    }
+
+    private static int getManualCount(LottoStore lottoStore) {
+        outputView.printManualCountGuide();
+        int manualCount = inputView.inputInt();
+        inputView.inputString();
+
+        lottoStore.validateManualCount(manualCount);
+        return manualCount;
+    }
+
+    private static List<String> getManualLottos(int manualCount) {
+        outputView.printManualLottoGuide();
+
+        ArrayList<String> lottoTickets = new ArrayList<>();
+        for (int i = 0; i < manualCount; i++) {
+            lottoTickets.add(inputView.inputString());
+        }
+
+        return lottoTickets;
     }
 
     private static void noticeResult(WinningLotto winningLotto, LottoTickets lottoTickets) {

@@ -1,4 +1,5 @@
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import domain.LottoNumber;
 import domain.NumberGenerator;
@@ -17,8 +18,10 @@ class LottoNumberGeneratorTest {
         NumberGenerator lottoNumberGenerator = new LottoNumberGenerator();
         List<LottoNumber> result = lottoNumberGenerator.generateNumbers();
 
-        assertThat(result).hasSize(6);
-        assertThat(new HashSet<>(result)).hasSize(6);
+        assertAll(
+                () -> assertThat(result).hasSize(6),
+                () -> assertThat(new HashSet<>(result)).hasSize(6)
+        );
     }
 
 }

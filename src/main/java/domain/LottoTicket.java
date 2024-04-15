@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +17,13 @@ public class LottoTicket {
         validateSize(numbers);
 
         this.lottoNumbers = numbers;
+    }
+
+    public LottoTicket(String LottoNumbers){
+       this(Arrays.stream(LottoNumbers.split(", "))
+                .map(Integer::parseInt)
+                .map(LottoNumber::new)
+                .collect(Collectors.toList()));
     }
 
     private void validateSize(List<LottoNumber> numbers) {

@@ -1,8 +1,5 @@
 package domain;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 public class WinningLotto {
 
     private final LottoTicket winningLottoTicket;
@@ -16,10 +13,7 @@ public class WinningLotto {
     }
 
     public WinningLotto(String winningNumbers, int bonusBall) {
-        this(new LottoTicket(Arrays.stream(winningNumbers.split(", "))
-                .map(Integer::parseInt)
-                .map(LottoNumber::new)
-                .collect(Collectors.toList())), new LottoNumber(bonusBall));
+        this(new LottoTicket(winningNumbers), new LottoNumber(bonusBall));
     }
 
     private void validateNotDuplicated(LottoTicket winningLottoTicket, LottoNumber bonusNumber) {
@@ -32,9 +26,6 @@ public class WinningLotto {
         long matchCount = winningLottoTicket.matchCount(lottoTicket);
         boolean isBonusMatch = lottoTicket.contains(bonusNumber);
 
-        return Arrays.stream(LottoPrice.values())
-                .filter(lottoPrice -> lottoPrice.matchPrice(matchCount, isBonusMatch))
-                .findAny()
-                .orElse(LottoPrice.NOTHING);
+        return LottoPrice.matchRank(matchCount, isBonusMatch);
     }
 }

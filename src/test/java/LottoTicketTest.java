@@ -1,6 +1,3 @@
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import domain.LottoNumber;
 import domain.LottoTicket;
 
@@ -9,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("LottoTicket 단위 테스트")
 public class LottoTicketTest {
@@ -23,7 +23,18 @@ public class LottoTicketTest {
 
     @Test
     void 로또티켓_생성() {
-        assertThat(lottoTicket).isNotNull();
+        assertAll(
+                ()->{
+                    assertThatCode(() -> {
+                        new LottoTicket(changeToLottoNumberList(List.of(1, 2, 3, 4, 5, 6)));
+                    }).doesNotThrowAnyException();
+                },
+                ()->{
+                    assertThatCode(() -> {
+                        new LottoTicket("1, 2, 3, 4, 5, 6");
+                    }).doesNotThrowAnyException();
+                }
+        );
     }
 
     @Test
