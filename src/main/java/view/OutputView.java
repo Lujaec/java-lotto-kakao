@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import model.random.LottoNumbers;
+import model.LottoNumbers;
 import model.winningLottery.Ranking;
 
 import static java.lang.String.valueOf;

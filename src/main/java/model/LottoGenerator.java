@@ -1,27 +1,29 @@
-package model.random;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Amount;
-
-import static model.Amount.LOTTO_UNIT_PRICE;
-
 public class LottoGenerator {
     private final List<LottoNumbers> lottoNumbers;
 
-    private LottoGenerator(List<LottoNumbers> lottoNumbers) {
+    public LottoGenerator(List<LottoNumbers> lottoNumbers) {
         this.lottoNumbers = new ArrayList<>(lottoNumbers);
     }
 
-    public static LottoGenerator generate(Amount amount) {
-        int count = amount.getCost() / LOTTO_UNIT_PRICE;
+    public static LottoGenerator generateAll(int wholeCount, List<LottoNumbers> manualLottos) {
+        List<LottoNumbers> allLottos = new ArrayList<>();
+        LottoGenerator lottoGenerator = generateRandom(wholeCount - manualLottos.size());
+        allLottos.addAll(manualLottos);
+        allLottos.addAll(lottoGenerator.lottoNumbers);
+        return new LottoGenerator(allLottos);
+    }
 
+    public static LottoGenerator generateRandom(int count) {
         List<LottoNumbers> lottoNumberList = new ArrayList<>();
 
         for (int i=0; i<count; i++) {
             LottoNumbers lottoNumbers =
-                new LottoNumbers(LottoNumbers.generateRandomNumbers(new RandomNumberGenerator() {}));
+                new LottoNumbers(RandomNumberGenerator.generateRandomNumbers());
             lottoNumberList.add(lottoNumbers);
         }
 

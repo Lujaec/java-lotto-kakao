@@ -1,12 +1,8 @@
 package model.winningLottery;
 
 import java.util.Objects;
-import java.util.Set;
 
 import model.Ball;
-import model.random.LottoNumbers;
-
-import static model.winningLottery.Ranking.*;
 
 public class WinningBonusNumber {
     private final Ball bonusNumber;

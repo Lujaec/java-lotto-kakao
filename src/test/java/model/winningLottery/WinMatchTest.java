@@ -5,7 +5,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import model.Ball;
-import model.random.LottoNumbers;
+import model.LottoNumbers;
 
 import static model.winningLottery.Ranking.FIFTH;
 import static model.winningLottery.Ranking.FIRST;

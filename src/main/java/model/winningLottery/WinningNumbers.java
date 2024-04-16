@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import model.Ball;
-import model.random.LottoNumbers;
+import model.LottoNumbers;
 
 public class WinningNumbers {
     private final Set<Ball> winningNumbers;
@@ -40,6 +40,7 @@ public class WinningNumbers {
 
         return new WinningNumbers(winningNumberSet);
     }
+
     public Set<Ball> getWinningNumbers() {
         return winningNumbers;
     }

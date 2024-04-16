@@ -2,11 +2,16 @@ package model;
 
 public class Amount {
     public static final int LOTTO_UNIT_PRICE = 1000;
+
     private final int cost;
 
     public Amount(int cost) {
         validate(cost);
         this.cost = cost;
+    }
+
+    public int getLottoCount() {
+        return cost / LOTTO_UNIT_PRICE;
     }
 
     private static void validate(int cost) {

@@ -3,9 +3,7 @@ package model.winningLottery;
 import java.util.Set;
 
 import model.Ball;
-import model.random.LottoNumbers;
-
-import static model.winningLottery.Ranking.*;
+import model.LottoNumbers;
 
 public class WinMatch {
     private static final int NUMBER_COUNT = 6;

@@ -1,11 +1,14 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import model.Amount;
 import model.Ball;
+import model.LottoNumbers;
 import model.calculator.Calculator;
 import model.calculator.LottoResult;
-import model.random.LottoGenerator;
+import model.LottoGenerator;
 import model.winningLottery.WinMatch;
 import model.winningLottery.Ranking;
 import model.winningLottery.WinningBonusNumber;
@@ -16,6 +19,7 @@ import view.OutputView;
 import static java.util.stream.Collectors.toList;
 
 public class LottoController {
+
     public static void run() {
         Amount amount = getAmount();
 
@@ -38,10 +42,21 @@ public class LottoController {
     }
 
     private static LottoGenerator generateLottoNumbers(Amount amount) {
-        LottoGenerator lottoGenerator = LottoGenerator.generate(amount);
+        int manualCount = InputView.manualCountInput();
+
+        validateStock(amount.getLottoCount(), manualCount);
+        List<LottoNumbers> manualLottos = InputView.manualLottoIn(manualCount);
+
+        LottoGenerator lottoGenerator = LottoGenerator.generateAll(amount.getLottoCount(), manualLottos);
         OutputView.printPurchaseCount(lottoGenerator.calculateCount());
         OutputView.printLottoNumberList(lottoGenerator.getLottoNumbers());
         return lottoGenerator;
+    }
+
+    private static void validateStock(int wholeCount, int manualCount) {
+        if (wholeCount < manualCount){
+            throw new IllegalArgumentException("총 구매 가능 갯수를 초과했습니다.");
+        }
     }
 
     private static WinningNumbers inputWinningNumbers() {

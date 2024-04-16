@@ -2,7 +2,7 @@ package model.calculator;
 
 import java.util.Objects;
 
-import model.random.LottoNumbers;
+import model.LottoNumbers;
 import model.winningLottery.WinMatch;
 import model.winningLottery.Ranking;
 
