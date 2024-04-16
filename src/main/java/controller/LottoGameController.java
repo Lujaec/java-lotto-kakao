@@ -1,10 +1,13 @@
 package controller;
 
-import generator.RandomNumberGenerator;
+import dto.LottoRankDto;
 import model.*;
 import view.LottoGameView;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LottoGameController {
 
@@ -17,10 +20,9 @@ public class LottoGameController {
     public void playGame() {
         Cost cost = requestCost();
         Lottos lottos = generateLottos(cost);
-        displayLottos(lottos, cost);
 
         WinningLotto winningLotto = requestWinningLotto();
-        LottoResult lottoResult = calculateResult(lottos, winningLotto);
+        LottoResult lottoResult = lottos.calculateResult(winningLotto);
 
         displayResult(lottoResult, cost);
     }
@@ -30,15 +32,17 @@ public class LottoGameController {
     }
 
     private Lottos generateLottos(Cost cost) {
-        RandomNumberGenerator numberGenerator = new RandomNumberGenerator();
-        int amounts = cost.calculateLottoAmount();
-        return new Lottos(amounts, numberGenerator);
-    }
+        int manualLottoAmount = lottoGameView.requestManualLottoAmount();
+        List<List<Integer>> manualLottoNumbers = lottoGameView.requestManualLottoNumbers(manualLottoAmount);
+        Lottos manualLottos = LottoGenerator.generateManualLottos(manualLottoNumbers);
 
-    private void displayLottos(Lottos lottos, Cost cost) {
-        int amounts = cost.calculateLottoAmount();
-        lottoGameView.displayLottoAmount(amounts);
+        int autoLottoAmount = cost.calculateAutoLottoAmount(manualLottoAmount);
+        Lottos autoLottos = LottoGenerator.generateAutoLottos(autoLottoAmount);
+        Lottos lottos = manualLottos.merge(autoLottos);
+
+        lottoGameView.displayLottoAmount(manualLottoAmount, autoLottoAmount);
         lottoGameView.displayLottos(lottos);
+        return lottos;
     }
 
     private WinningLotto requestWinningLotto() {
@@ -47,13 +51,14 @@ public class LottoGameController {
         return new WinningLotto(winningNumbers, bonusNumber);
     }
 
-    private LottoResult calculateResult(Lottos lottos, WinningLotto winningLotto) {
-        LottoGame lottoGame = new LottoGame(lottos);
-        return lottoGame.calculateResult(winningLotto);
-    }
-
     private void displayResult(LottoResult lottoResult, Cost cost) {
-        lottoGameView.displayStatistics(lottoResult.calculateStatistics());
+        Map<LottoRank, Long> lottoRankLongMap = lottoResult.calculateStatistics();
+
+        List<LottoRankDto> lottoRankDto = Arrays.stream(LottoRank.values())
+                .map(it -> LottoRankDto.from(it, lottoRankLongMap.getOrDefault(it, 0L)))
+                .collect(Collectors.toList());
+
+        lottoGameView.displayStatistics(lottoRankDto);
         lottoGameView.displayProfit(lottoResult.calculateProfit(cost));
     }
 }

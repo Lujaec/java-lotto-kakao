@@ -1,30 +1,26 @@
 package model;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LottoResult {
-    private static final int INITIAL_COUNT = 0;
-    private static final int COUNT_INCREMENT = 1;
     private final List<LottoRank> lottoRanks;
 
     public LottoResult(List<LottoRank> lottoRanks) {
         this.lottoRanks = lottoRanks;
     }
 
-    public Map<LottoRank, Integer> calculateStatistics() {
-        Map<LottoRank, Integer> statistics = new HashMap<>();
-        for (LottoRank lottoRank : lottoRanks) {
-            statistics.put(lottoRank, statistics.getOrDefault(lottoRank, INITIAL_COUNT) + COUNT_INCREMENT);
-        }
-        return statistics;
+    public Map<LottoRank, Long> calculateStatistics() {
+        return lottoRanks.stream()
+                .collect(Collectors.groupingBy(rank -> rank, Collectors.counting()));
     }
 
     public Double calculateProfit(Cost cost) {
-        return lottoRanks.stream()
+        double sum = lottoRanks.stream()
                 .mapToDouble(LottoRank::getPrize)
-                .sum() / cost.getSpent();
+                .sum();
+        return sum / cost.getSpent();
     }
 
     public List<LottoRank> getLottoRanks() {

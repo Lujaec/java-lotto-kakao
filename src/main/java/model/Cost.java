@@ -24,4 +24,9 @@ public class Cost {
     public int getSpent() {
         return calculateLottoAmount() * LOTTO_PRICE;
     }
+
+
+    public int calculateAutoLottoAmount(int manualLottoAmount) {
+        return calculateLottoAmount() - manualLottoAmount;
+    }
 }

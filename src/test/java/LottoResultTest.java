@@ -20,7 +20,7 @@ public class LottoResultTest {
     public void calculateStatisticsTest() {
         LottoResult lottoResult = new LottoResult(List.of(LottoRank.FIRST, LottoRank.SECOND, LottoRank.THIRD));
 
-        Map<LottoRank, Integer> lottoRankIntegerMap = lottoResult.calculateStatistics();
+        Map<LottoRank, Long> lottoRankIntegerMap = lottoResult.calculateStatistics();
 
         assertEquals(lottoRankIntegerMap.get(LottoRank.FIRST), EXISTS);
         assertEquals(lottoRankIntegerMap.get(LottoRank.SECOND), EXISTS);
