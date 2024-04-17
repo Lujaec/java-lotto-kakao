@@ -11,11 +11,15 @@ public class LottoNumberGenerator implements LottoGenerateStrategy {
 	private static final int LOTTO_NUMBER_END = 45;
 	private static final int LOTTO_NUMBER_COUNT = 6;
 
-	public List<Integer> generate() {
-		List<Integer> numbers = IntStream.rangeClosed(LOTTO_NUMBER_START, LOTTO_NUMBER_END)
+	private final List<Integer> numbers;
+
+	public LottoNumberGenerator() {
+		this.numbers = IntStream.rangeClosed(LOTTO_NUMBER_START, LOTTO_NUMBER_END)
 			.boxed()
 			.collect(Collectors.toList());
+	}
 
+	public List<Integer> generate() {
 		Collections.shuffle(numbers);
 
 		return numbers.stream()

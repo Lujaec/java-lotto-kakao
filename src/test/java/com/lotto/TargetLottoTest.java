@@ -10,20 +10,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import com.lotto.model.LottoNumber;
+import com.lotto.model.LottoNumbers;
 import com.lotto.model.LottoRank;
 import com.lotto.model.LottoTicket;
 import com.lotto.model.TargetLotto;
 
 public class TargetLottoTest {
 	@Test
-	void name() {
+	void 지난주_로또_객체를_생성할_수_있다() {
 		TargetLotto targetLotto = new TargetLotto(List.of(1, 2, 3, 4, 5, 6), 7);
 
-		List<Integer> numbers = targetLotto.getNumbers();
-		int bonusNumber = targetLotto.getBonusNumber();
+		LottoNumbers numbers = targetLotto.getNumbers();
+		LottoNumber bonusNumber = targetLotto.getBonusNumber();
 
 		assertThat(numbers.size()).isEqualTo(6);
-		assertThat(bonusNumber).isEqualTo(7);
+		assertThat(bonusNumber.getNumber()).isEqualTo(7);
 	}
 
 	@ParameterizedTest

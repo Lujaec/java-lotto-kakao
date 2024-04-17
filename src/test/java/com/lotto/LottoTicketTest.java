@@ -14,4 +14,10 @@ public class LottoTicketTest {
 		LottoTicket lotto = new LottoTicket(List.of(1, 2, 3, 4, 5, 6));
 		assertThat(lotto).isInstanceOf(LottoTicket.class);
 	}
+
+	@Test
+	void 로또_번호는_6개이다() {
+		assertThatThrownBy(() -> new LottoTicket(List.of(1, 2, 3, 4, 5, 6, 7)))
+			.isInstanceOf(IllegalArgumentException.class);
+	}
 }

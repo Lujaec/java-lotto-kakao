@@ -20,6 +20,10 @@ public class LottoResults {
 			.ifPresent(LottoResult::addCount);
 	}
 
+	public void addLottoCounts(List<LottoRank> lottoRanks) {
+		lottoRanks.forEach(this::addLottoCount);
+	}
+
 	public int calculateTotalPrize() {
 		return lottoResults.stream()
 			.mapToInt(LottoResult::getPrize)

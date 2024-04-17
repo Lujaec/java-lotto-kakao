@@ -1,5 +1,7 @@
 package com.lotto.model;
 
+import java.util.stream.Stream;
+
 public enum LottoRank {
 	FIRST(6, false, 2_000_000_000),
 	SECOND(5, true, 30_000_000),
@@ -18,16 +20,18 @@ public enum LottoRank {
 	}
 
 	public static LottoRank of(int matchCount, boolean bonus) {
-		for (LottoRank lottoRank : values()) {
-			if (lottoRank.matchCount == matchCount && lottoRank.bonus == bonus) {
-				return lottoRank;
-			}
-		}
-		return FAIL;
+		return Stream.of(values())
+			.filter(lottoRank -> lottoRank.isEquals(matchCount, bonus))
+			.findFirst()
+			.orElse(FAIL);
 	}
 
 	public int getPrize() {
 		return prize;
+	}
+
+	public boolean isEquals(int matchCount, boolean bonus) {
+		return this.matchCount == matchCount && this.bonus == bonus;
 	}
 
 	@Override

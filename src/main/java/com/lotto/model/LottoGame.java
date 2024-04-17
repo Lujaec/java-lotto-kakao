@@ -3,13 +3,16 @@ package com.lotto.model;
 import com.lotto.util.LottoGenerateStrategy;
 
 public class LottoGame {
-	private static final int LOTTO_PRICE = 1000;
+	public static final int LOTTO_PRICE = 1000;
 	private final LottoTickets lottoTickets;
-	private final LottoResults lottoResults;
+	private LottoResults lottoResults = null;
 
-	public LottoGame(int money, LottoGenerateStrategy lottoGenerateStrategy) {
-		this.lottoTickets = new LottoTickets(money / LOTTO_PRICE, lottoGenerateStrategy);
-		this.lottoResults = new LottoResults();
+	public LottoGame(int money, LottoTickets lottoTickets) {
+		this.lottoTickets = lottoTickets;
+	}
+
+	public void addManualLottoTicket(LottoTickets lottoTickets) {
+		this.lottoTickets.addManualLotto(lottoTickets);
 	}
 
 	public LottoTickets getLottoTickets() {
@@ -17,15 +20,15 @@ public class LottoGame {
 	}
 
 	public double calculateProfit() {
+		if (lottoResults == null) {
+			throw new RuntimeException("로또 결과가 없습니다.");
+		}
 		double totalPrize = lottoResults.calculateTotalPrize();
 		return totalPrize / (lottoTickets.size() * LOTTO_PRICE);
 	}
 
 	public LottoResults play(TargetLotto targetLotto) {
-		lottoTickets.getLottoTickets().forEach(lottoTicket -> {
-			LottoRank lottoRank = targetLotto.match(lottoTicket);
-			lottoResults.addLottoCount(lottoRank);
-		});
+		lottoResults = lottoTickets.playLotto(targetLotto);
 		return lottoResults;
 	}
 }
