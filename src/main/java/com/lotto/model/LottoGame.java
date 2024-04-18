@@ -1,43 +1,48 @@
 package com.lotto.model;
 
-import com.lotto.util.LottoGenerateStrategy;
+import com.lotto.util.LottoNumbersGenerator;
 
 import java.util.List;
 
 public class LottoGame {
-    private static final int LOTTO_PRICE = 1000;
-    private final LottoTickets lottoTickets;
-    private final LottoResults lottoResults;
 
-    public LottoGame(int money, LottoGenerateStrategy lottoGenerateStrategy) {
-        validateMoney(money);
-        this.lottoTickets = new LottoTickets(money / LOTTO_PRICE, lottoGenerateStrategy);
-        this.lottoResults = new LottoResults();
+    private final LottoPlayer lottoPlayer;
+    private final AutoLottoMachine autoLottoMachine;
+
+
+    public LottoGame() {
+        this.lottoPlayer = new LottoPlayer();
+        this.autoLottoMachine = new AutoLottoMachine(new LottoNumbersGenerator());
     }
 
-    public LottoTickets getLottoTickets() {
-        return lottoTickets;
-    }
-
-    public double calculateProfit() {
-        double totalPrize = lottoResults.calculateTotalPrize();
-        return totalPrize / (lottoTickets.size() * LOTTO_PRICE);
-    }
-
-    public LottoResults play(List<Integer> winningNumbers, int bonusNumber) {
-        TargetLotto targetLotto = new TargetLotto(winningNumbers, bonusNumber);
+    public LottoResults play(TargetLotto targetLotto) {
+        LottoResults lottoResults = new LottoResults();
+        LottoTickets lottoTickets = lottoPlayer.getLottoTickets();
         List<LottoRank> lottoRanks = lottoTickets.matchAll(targetLotto);
         lottoResults.applyLottoRanks(lottoRanks);
         return lottoResults;
     }
 
-    public int getLottoTicketSize() {
-        return lottoTickets.size();
+    public int buyLottos(Money money, List<List<Integer>> manualLottoTicketNumbers) {
+        lottoPlayer.inputMoney(money);
+        buyManualTickets(manualLottoTicketNumbers);
+        return buyAutoTickets();
     }
 
-    private void validateMoney(int money) {
-        if (money < LOTTO_PRICE) {
-            throw new IllegalArgumentException(String.format("로또 구입 금액은 최소 %s원입니다.", LOTTO_PRICE));
+    private int buyAutoTickets() {
+        Money balance = lottoPlayer.getBalance();
+        int autoLottoTicketSize = balance.divide(Money.valueOf(LottoTicket.PRICE)).intValue();
+        for (int i = 0; i < autoLottoTicketSize; i++) {
+            LottoNumbers lottoNumbers = autoLottoMachine.generateLottoNumbers();
+            lottoPlayer.buyLottoTicket(lottoNumbers);
         }
+        return autoLottoTicketSize;
+    }
+
+    private void buyManualTickets(List<List<Integer>> manualLottoTicketNumbers) {
+        manualLottoTicketNumbers.forEach(numbers -> {
+            LottoNumbers lottoNumbers = LottoNumbers.valueOf(numbers);
+            lottoPlayer.buyLottoTicket(lottoNumbers);
+        });
     }
 }

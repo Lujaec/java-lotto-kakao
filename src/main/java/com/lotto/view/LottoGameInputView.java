@@ -1,9 +1,10 @@
 package com.lotto.view;
 
-import java.util.Arrays;
+import com.lotto.util.StringUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class LottoGameInputView {
     private final Scanner scanner = new Scanner(System.in);
@@ -20,9 +21,21 @@ public class LottoGameInputView {
 
     public List<Integer> inputWinningNumbers() {
         System.out.println("지난 주 당첨 번호를 입력해 주세요.");
-        return Arrays.stream(scanner.nextLine().split(","))
-                .map(String::trim)
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+        return StringUtils.parseCommaSeparatedToIntegerList(scanner.nextLine());
+    }
+
+    public int inputManualLottoTicketSize() {
+        System.out.println("수동으로 구매할 로또 수를 입력해 주세요.");
+        return Integer.parseInt(scanner.nextLine());
+    }
+
+    public List<List<Integer>> inputManualLottoTicketNumbers(int manualLottoTicketSize) {
+        System.out.println("수동으로 구매할 번호를 입력해 주세요.");
+        List<List<Integer>> manualLottoTicketNumbers = new ArrayList<>();
+        for (int i = 0; i < manualLottoTicketSize; i++) {
+            List<Integer> manualLottoNumbers = StringUtils.parseCommaSeparatedToIntegerList(scanner.nextLine());
+            manualLottoTicketNumbers.add(manualLottoNumbers);
+        }
+        return manualLottoTicketNumbers;
     }
 }

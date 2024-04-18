@@ -1,23 +1,14 @@
 package com.lotto.model;
 
-import com.lotto.util.LottoGenerateStrategy;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LottoTickets {
 
-    private final List<LottoNumbers> lottoTickets = new ArrayList<>();
+    private final List<LottoTicket> lottoTickets = new ArrayList<>();
 
-    public LottoTickets(int lottoTicketSize, LottoGenerateStrategy lottoGenerateStrategy) {
-        for (int i = 0; i < lottoTicketSize; i++) {
-            List<LottoNumber> lottoNumbers = lottoGenerateStrategy.generate();
-            lottoTickets.add(new LottoNumbers(lottoNumbers));
-        }
-    }
-
-    public List<LottoNumbers> getLottoTickets() {
+    public List<LottoTicket> getLottoTickets() {
         return lottoTickets;
     }
 
@@ -27,7 +18,12 @@ public class LottoTickets {
 
     public List<LottoRank> matchAll(TargetLotto targetLotto) {
         return lottoTickets.stream()
+                .map(LottoTicket::getLottoNumbers)
                 .map(targetLotto::match)
                 .collect(Collectors.toList());
+    }
+
+    public void add(LottoTicket lottoTicket) {
+        lottoTickets.add(lottoTicket);
     }
 }

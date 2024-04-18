@@ -11,14 +11,14 @@ public class LottoNumber implements Comparable<LottoNumber> {
 
     static {
         for (int i = LOTTO_NUMBER_MIN; i <= LOTTO_NUMBER_MAX; i++) {
-            LOTTO_NUMBER_CACHE.put(i, new LottoNumber(i));
+            LOTTO_NUMBER_CACHE.put(i, LottoNumber.valueOf(i));
         }
         LOTTO_NUMBER_CACHE_VALUES = new ArrayList<>(LOTTO_NUMBER_CACHE.values());
     }
 
     private final int number;
 
-    public LottoNumber(int number) {
+    private LottoNumber(int number) {
         validateRange(number);
         this.number = number;
     }
@@ -57,6 +57,10 @@ public class LottoNumber implements Comparable<LottoNumber> {
     @Override
     public String toString() {
         return String.valueOf(number);
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     private void validateRange(int number) {

@@ -33,4 +33,26 @@ public class LottoResults {
     public void applyLottoRanks(List<LottoRank> lottoRanks) {
         lottoRanks.forEach(this::addLottoRankCount);
     }
+
+    public double calculateProfit() {
+        int totalPrize = calculateTotalPrize();
+        int resultCount = getResultCount() * LottoTicket.PRICE;
+        return (double) totalPrize / resultCount;
+    }
+
+    private int getResultCount() {
+        int resultCount = lottoResults.stream()
+                .map(LottoResult::getCount)
+                .reduce(Integer::sum)
+                .orElse(0);
+
+        validateResultCountIsNotZero(resultCount);
+        return resultCount;
+    }
+
+    private void validateResultCountIsNotZero(int resultCount) {
+        if (resultCount == 0) {
+            throw new IllegalArgumentException("당첨 결과가 없습니다.");
+        }
+    }
 }

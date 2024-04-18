@@ -5,10 +5,12 @@ import java.util.stream.Collectors;
 
 public class LottoNumbers {
 
+    private static final int LOTTO_NUMBER_SIZE = 6;
     private final List<LottoNumber> lottoNumbers;
 
     public LottoNumbers(List<LottoNumber> lottoNumbers) {
         validateDuplication(lottoNumbers);
+        validateSize(lottoNumbers);
         this.lottoNumbers = lottoNumbers;
     }
 
@@ -16,6 +18,10 @@ public class LottoNumbers {
         List<LottoNumber> lottoNumbers = numbers.stream()
                 .map(LottoNumber::valueOf)
                 .collect(Collectors.toList());
+        return new LottoNumbers(lottoNumbers);
+    }
+
+    public static LottoNumbers of(List<LottoNumber> lottoNumbers) {
         return new LottoNumbers(lottoNumbers);
     }
 
@@ -33,11 +39,14 @@ public class LottoNumbers {
                 .count();
     }
 
-    @Override
-    public String toString() {
-        return lottoNumbers.stream()
-                .map(LottoNumber::toString)
-                .collect(Collectors.joining(", ", "[", "]"));
+    public List<LottoNumber> getNumbers() {
+        return lottoNumbers;
+    }
+
+    private void validateSize(List<LottoNumber> lottoNumbers) {
+        if (lottoNumbers.size() != LOTTO_NUMBER_SIZE) {
+            throw new IllegalArgumentException("로또 번호는 6개여야 합니다.");
+        }
     }
 
     private void validateDuplication(List<LottoNumber> lottoNumbers) {

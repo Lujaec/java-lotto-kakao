@@ -12,7 +12,7 @@ class LottoNumberTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 45})
     void 로또_번호_생성(int number) {
-        LottoNumber lottoNumber = new LottoNumber(number);
+        LottoNumber lottoNumber = LottoNumber.valueOf(number);
         assertThat(lottoNumber).isInstanceOf(lottoNumber.getClass());
         assertThat(lottoNumber).isNotNull();
     }
@@ -20,7 +20,7 @@ class LottoNumberTest {
     @ParameterizedTest
     @ValueSource(ints = {-1, 0, 46})
     void 로또_번호는_1부터_45여야_한다(int number) {
-        assertThatThrownBy(() -> new LottoNumber(number))
+        assertThatThrownBy(() -> LottoNumber.valueOf(number))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

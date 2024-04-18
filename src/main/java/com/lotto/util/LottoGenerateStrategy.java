@@ -1,9 +1,7 @@
 package com.lotto.util;
 
-import com.lotto.model.LottoNumber;
-
-import java.util.List;
+import com.lotto.model.LottoNumbers;
 
 public interface LottoGenerateStrategy {
-    List<LottoNumber> generate();
+    LottoNumbers generate();
 }
