@@ -1,6 +1,9 @@
 package controller;
 
-import lotto.*;
+import lotto.GameResult;
+import lotto.LottoGame;
+import lotto.NumberGenerator;
+import lotto.WinningLotto;
 import view.LottoGameInputView;
 import view.LottoGameOutputView;
 
@@ -16,21 +19,20 @@ public class LottoGameController {
 
     private static LottoGame setupLottoGame() {
         int budget = LottoGameInputView.getBudget();
-        LottoGame lottoGame = new LottoGame(budget, new NumberGenerator());
+        List<List<Integer>> manualLottos = LottoGameInputView.getManualLottos();
+        LottoGame lottoGame = LottoGame.autoWithManual(budget, new NumberGenerator(), manualLottos);
         displayPurchasedLottos(lottoGame);
         return lottoGame;
     }
 
     private static void displayPurchasedLottos(LottoGame lottoGame) {
-        List<Lotto> lottos = lottoGame.getLottos();
-        LottoGameOutputView.displayNumberOfLottos(lottos.size());
-        lottos.stream()
-                .map(Lotto::getLottoNumbers)
-                .forEach(LottoGameOutputView::displayLotto);
+        LottoGameOutputView.displayNumberOfLottos(lottoGame.getManualLottoSize(), lottoGame.getAutoLottoSize());
+        LottoGameOutputView.displayLottos(lottoGame.getLottos());
     }
 
     private static GameResult matchWinningNumber(LottoGame lottoGame) {
-        WinningLotto winningLotto = LottoGameInputView.getWinningNumber();
+        LottoGameInputView.WinningLotto winningLottoInput = LottoGameInputView.getWinningNumber();
+        WinningLotto winningLotto = new WinningLotto(winningLottoInput.getWinningLottoNumbers(), winningLottoInput.getWinningBonusNumber());
         return lottoGame.matchWith(winningLotto);
     }
 

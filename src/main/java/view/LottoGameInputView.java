@@ -1,7 +1,5 @@
 package view;
 
-import lotto.WinningLotto;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -10,14 +8,19 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class LottoGameInputView {
     private static final String INPUT_BUDGET_MSG = "구입금액을 입력해 주세요.";
+    private static final String INPUT_NUMBER_OF_MANUAL_BUY_MSG = "수동으로 구매할 로또 수를 입력해 주세요.";
+    private static final String INPUT_MANUAL_LOTTO_NUMBERS_MSG = "수동으로 구매할 번호를 입력해 주세요.";
     private static final String INPUT_WINNING_LOTTO_NUMBERS_MSG = "지난 주 당첨 번호를 입력해 주세요.";
     private static final String INPUT_WINNING_BONUS_NUMBERS_MSG = "보너스 볼을 입력해 주세요.";
 
     public static int getBudget() {
-        return retryableInput(LottoGameInputView::inputBudget, LottoGameInputView::isValidBudget);
+        Integer budget = retryableInput(LottoGameInputView::inputBudget, LottoGameInputView::isValidBudget);
+        System.out.println();
+        return budget;
     }
 
     private static <T> T retryableInput(Supplier<T> supplier, Predicate<T> validator) {
@@ -47,7 +50,9 @@ public class LottoGameInputView {
     }
 
     private static String inputString(String msg) {
-        System.out.println(msg);
+        if (!msg.isEmpty()) {
+            System.out.println(msg);
+        }
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
@@ -55,14 +60,33 @@ public class LottoGameInputView {
     public static WinningLotto getWinningNumber() {
         List<Integer> winningLottoNumbers = getWinningLottoNumbers();
         int winningBonusNumber = getWinningBonusNumber(winningLottoNumbers);
+        System.out.println();
         return new WinningLotto(winningLottoNumbers, winningBonusNumber);
     }
 
-    private static List<Integer> getWinningLottoNumbers() {
-        return retryableInput(LottoGameInputView::inputWinningLottoNumbers, LottoGameInputView::isValidWinningLottoNumbers);
+    public static class WinningLotto {
+        private final List<Integer> winningLottoNumbers;
+        private final int winningBonusNumber;
+
+        public WinningLotto(List<Integer> winningLottoNumbers, int winningBonusNumber) {
+            this.winningLottoNumbers = winningLottoNumbers;
+            this.winningBonusNumber = winningBonusNumber;
+        }
+
+        public List<Integer> getWinningLottoNumbers() {
+            return winningLottoNumbers;
+        }
+
+        public int getWinningBonusNumber() {
+            return winningBonusNumber;
+        }
     }
 
-    private static boolean isValidWinningLottoNumbers(List<Integer> winningLottoNumbers) {
+    private static List<Integer> getWinningLottoNumbers() {
+        return retryableInput(LottoGameInputView::inputWinningLottoNumbers, LottoGameInputView::isValidLottoNumbers);
+    }
+
+    private static boolean isValidLottoNumbers(List<Integer> winningLottoNumbers) {
         boolean isSixLength = winningLottoNumbers.size() == 6;
         boolean outBoundedNumber = winningLottoNumbers.stream().anyMatch(number -> number < 1 || number > 45);
         boolean duplicatedNumber = winningLottoNumbers.size() != new HashSet<>(winningLottoNumbers).size();
@@ -100,6 +124,57 @@ public class LottoGameInputView {
 
     private static int inputWinningBonusNumber() {
         return inputInt(INPUT_WINNING_BONUS_NUMBERS_MSG);
+    }
+
+    public static List<List<Integer>> getManualLottos() {
+        int numberOfManualBuy = getNumberOfManualBuy();
+        System.out.println();
+        List<List<Integer>> manualLottoNumbers = getManualLottoNumbers(numberOfManualBuy);
+        System.out.println();
+        return manualLottoNumbers;
+    }
+
+    private static int getNumberOfManualBuy() {
+        return retryableInput(LottoGameInputView::inputNumberOfManualBuy, LottoGameInputView::isValidNumberOfManualBuy);
+    }
+
+    private static boolean isValidNumberOfManualBuy(int numberOfManualBuy) {
+        return numberOfManualBuy > 0;
+    }
+
+    private static int inputNumberOfManualBuy() {
+        return inputInt(INPUT_NUMBER_OF_MANUAL_BUY_MSG);
+    }
+
+    private static List<List<Integer>> getManualLottoNumbers(int numberOfManualBuy) {
+        Supplier<List<List<Integer>>> mixedSupplier =
+                () -> inputManualLottoNumbers(numberOfManualBuy);
+        Function<Integer, Predicate<List<List<Integer>>>> mixedValidate =
+                numOfManualBuy ->
+                        lottos -> isValidManualLottoNumbers(lottos, numOfManualBuy);
+        return retryableInput(mixedSupplier, mixedValidate.apply(numberOfManualBuy));
+    }
+
+    private static boolean isValidManualLottoNumbers(List<List<Integer>> manualLottos, int numberOfManualBuy) {
+        if (manualLottos.size() != numberOfManualBuy) {
+            return false;
+        }
+        return manualLottos.stream()
+                .filter(Predicate.not(LottoGameInputView::isValidLottoNumbers))
+                .findAny()
+                .isEmpty();
+    }
+
+    private static List<List<Integer>> inputManualLottoNumbers(int numberOfManualBuy) {
+        System.out.println(INPUT_MANUAL_LOTTO_NUMBERS_MSG);
+        try {
+            return IntStream.range(0, numberOfManualBuy)
+                    .mapToObj(i -> inputIntList(""))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            System.out.println("[ERROR] 처음부터 다시 입력해주세요.");
+            return inputManualLottoNumbers(numberOfManualBuy);
+        }
     }
 
 }
