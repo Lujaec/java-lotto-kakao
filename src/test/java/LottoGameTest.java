@@ -6,18 +6,30 @@ import model.WinnerLottoNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import util.TestNumberGenerator;
 
 public class LottoGameTest {
 
     private LottoGame lottoGame;
-    private TestNumberGenerator testNumberGenerator;
 
     @BeforeEach
     void setUp() {
-        testNumberGenerator = new TestNumberGenerator(List.of(
-            List.of(1, 2, 3, 4, 5, 6)
+        // 자동 로또 번호
+        TestNumberGenerator testRandomNumberGenerator = new TestNumberGenerator(List.of(
+            List.of(1, 2, 3, 4, 5, 6),
+            List.of(1, 3, 5, 7, 9, 11)
         ));
-        lottoGame = new LottoGame(1000, testNumberGenerator);
+        // 수동 로또 번호
+        TestNumberGenerator testManualNumberGenerator = new TestNumberGenerator(List.of(
+            List.of(2, 4, 6, 8, 10, 12),
+            List.of(11, 12, 13, 14, 15, 16)
+        ));
+        lottoGame = new LottoGame(
+            2000,
+            1,
+            testManualNumberGenerator,
+            testRandomNumberGenerator
+        );
     }
 
     @Test
@@ -27,7 +39,7 @@ public class LottoGameTest {
 
     @Test
     void calculateLottoAmountWithValidCost() {
-        Assertions.assertEquals(1, lottoGame.calculateLottoAmount());
+        Assertions.assertEquals(2, lottoGame.calculateLottoAmount());
     }
 
     @Test
@@ -69,13 +81,13 @@ public class LottoGameTest {
         WinnerLottoNumber winnerLottoNumber = WinnerLottoNumber.of(List.of(1, 2, 3, 4, 5, 6), 7);
         List<LottoRank> lottoRanks = lottoGame.calculateResult(winnerLottoNumber);
         double profit = lottoGame.calculateProfit(lottoRanks);
-        Assertions.assertEquals(2000000, profit);
+        Assertions.assertEquals(1000002.5, profit);
     }
 
     @Test
     void calculateProfitWithNoMatchingNumbers() {
-        WinnerLottoNumber winnerLottoNumber = WinnerLottoNumber.of(List.of(7, 8, 9, 10, 11, 12),
-            13);
+        WinnerLottoNumber winnerLottoNumber = WinnerLottoNumber.of(List.of(13, 14, 15, 16, 17, 18),
+            19);
         List<LottoRank> lottoRanks = lottoGame.calculateResult(winnerLottoNumber);
         double profit = lottoGame.calculateProfit(lottoRanks);
         Assertions.assertEquals(0, profit);

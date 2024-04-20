@@ -17,7 +17,7 @@ public class RandomNumberGenerator implements NumberGenerator {
         Collections.shuffle(NUMBERS);
         return NUMBERS.stream()
             .limit(6)
-            .map(LottoNumber::new)
+            .map(LottoNumber::of)
             .collect(Collectors.toSet());
     }
 }

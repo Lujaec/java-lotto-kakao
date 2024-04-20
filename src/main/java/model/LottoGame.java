@@ -10,10 +10,14 @@ public class LottoGame {
     private final Cost cost;
     private final Lottos lottos;
 
-    public LottoGame(int cost, NumberGenerator numberGenerator) {
+    public LottoGame(int cost, int manualLottoAmount, NumberGenerator manualNumberGenerator,
+        NumberGenerator randomNumberGenerator) {
         this.cost = new Cost(cost);
-        int amounts = calculateLottoAmount();
-        lottos = new Lottos(amounts, numberGenerator);
+        int amounts = calculateLottoAmount() - manualLottoAmount;
+        lottos = new Lottos(amounts, randomNumberGenerator);
+        lottos.add(
+            new Lottos(manualLottoAmount, manualNumberGenerator)
+        );
     }
 
     public int calculateLottoAmount() {

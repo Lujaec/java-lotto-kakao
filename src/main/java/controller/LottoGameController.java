@@ -3,8 +3,8 @@ package controller;
 import java.util.List;
 import model.LottoGame;
 import model.LottoRank;
-import model.Lottos;
 import model.WinnerLottoNumber;
+import util.ManualNumberGenerator;
 import util.RandomNumberGenerator;
 import view.LottoGameView;
 
@@ -17,18 +17,22 @@ public class LottoGameController {
     }
 
     public void playGame() {
-        LottoGame lottoGame = new LottoGame(lottoGameView.requestCost(),
-            new RandomNumberGenerator());
+        int manualLottoAmount = lottoGameView.requestManualLottoAmount();
+
+        LottoGame lottoGame = new LottoGame(
+            lottoGameView.requestCost(),
+            manualLottoAmount,
+            new ManualNumberGenerator(lottoGameView.requestManualLottoNumbers(manualLottoAmount)),
+            new RandomNumberGenerator()
+        );
 
         lottoGameView.displayLottoAmount(lottoGame.calculateLottoAmount());
+        lottoGameView.displayLottos(lottoGame.getLottos());
 
-        Lottos lottos = lottoGame.getLottos();
-        lottoGameView.displayLottos(lottos);
-
-        List<Integer> winningNumbers = lottoGameView.requestWinningNumbers();
-        int bonusNumber = lottoGameView.requestBonusNumber();
-
-        WinnerLottoNumber winnerLottoNumber = WinnerLottoNumber.of(winningNumbers, bonusNumber);
+        WinnerLottoNumber winnerLottoNumber = WinnerLottoNumber.of(
+            lottoGameView.requestWinningNumbers(),
+            lottoGameView.requestBonusNumber()
+        );
 
         List<LottoRank> lottoRanks = lottoGame.calculateResult(winnerLottoNumber);
         lottoGameView.displayStatistics(lottoGame.calculateStatistics(lottoRanks));

@@ -1,3 +1,7 @@
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import model.Cost;
 import model.Lotto;
@@ -7,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import util.TestNumberGenerator;
 
 public class LottoTest {
 
@@ -26,13 +31,14 @@ public class LottoTest {
     @ValueSource(ints = {100, 200, 300})
     void validateLottoInvalidCost(int cost) {
         Assertions.assertThrows(IllegalArgumentException.class,
-            () -> new LottoGame(cost, testNumberGenerator));
+            () -> new LottoGame(cost, 0, testNumberGenerator, testNumberGenerator));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {1000, 1500, 2000})
     void validateLottoCost(int cost) {
-        Assertions.assertDoesNotThrow(() -> new LottoGame(cost, testNumberGenerator));
+        Assertions.assertDoesNotThrow(() -> new LottoGame(cost, 0, testNumberGenerator,
+            testNumberGenerator));
     }
 
     @ParameterizedTest
@@ -55,5 +61,16 @@ public class LottoTest {
         ));
         Lotto otherLotto = new Lotto(otherNumberGenerator);
         Assertions.assertEquals(0, lotto.getMatchCount(otherLotto));
+    }
+
+    @Test
+    public void ofThrowsExceptionWhenNumbersAreDuplicated() {
+        assertThrows(IllegalArgumentException.class,
+            () -> Lotto.of(Arrays.asList(1, 1, 2, 3, 4, 5)));
+    }
+
+    @Test
+    public void ofThrowsExceptionWhenNumbersAreLessThanSix() {
+        assertThrows(IllegalArgumentException.class, () -> Lotto.of(Collections.singletonList(1)));
     }
 }

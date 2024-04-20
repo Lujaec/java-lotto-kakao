@@ -10,7 +10,7 @@ public class WinnerLottoNumber {
 
     private WinnerLottoNumber(Lotto lotto, int bonusNumber) {
         this.lotto = lotto;
-        this.bonusNumber = new LottoNumber(bonusNumber);
+        this.bonusNumber = LottoNumber.of(bonusNumber);
     }
 
     public static WinnerLottoNumber of(List<Integer> numbers, int bonusNumber) {

@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +31,34 @@ public class LottoGameView {
             System.out.println("[ERROR] 숫자를 입력해야 합니다.");
             return requestCost();
         }
+    }
+
+    public int requestManualLottoAmount() {
+        System.out.println("수동으로 구매할 로또 수를 입력해 주세요.");
+        String input = sc.nextLine();
+
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            System.out.println("[ERROR] 숫자를 입력해야 합니다.");
+            return requestManualLottoAmount();
+        }
+    }
+
+    public List<List<Integer>> requestManualLottoNumbers(int manualLottoAmount) {
+        System.out.println("수동으로 구매할 번호를 입력해 주세요.");
+        List<List<Integer>> manualLottoNumbers = new ArrayList<>();
+
+        for (int i = 0; i < manualLottoAmount; i++) {
+            String input = sc.nextLine();
+            List<Integer> numbers = Arrays.stream(input.split(","))
+                .map(String::trim)
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+            manualLottoNumbers.add(numbers);
+        }
+
+        return manualLottoNumbers;
     }
 
     public void displayLottoAmount(int lottoAmount) {
