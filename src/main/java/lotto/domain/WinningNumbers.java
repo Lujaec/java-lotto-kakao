@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WinningNumbers extends Numbers {
+public class WinningNumbers {
+    private final Numbers regularNumbers;
     private final Number bonusNumber;
 
     public WinningNumbers(List<Number> regularNumbers, Number bonusNumber) {
@@ -12,13 +13,13 @@ public class WinningNumbers extends Numbers {
     }
 
     public WinningNumbers(Set<Number> regularNumbers, Number bonusNumber) {
-        super(regularNumbers);
+        this.regularNumbers = new Numbers(regularNumbers);
         this.bonusNumber = bonusNumber;
         validateWinningNumber(regularNumbers, bonusNumber);
     }
 
-    public Prize checkWinning(TicketNumbers ticketNumbers) {
-        int matchCount = ticketNumbers.match(this);
+    public Prize checkWinning(Numbers ticketNumbers) {
+        int matchCount = ticketNumbers.match(regularNumbers);
         if (matchCount <= 2) {
             return Prize.NOTHING;
         }
