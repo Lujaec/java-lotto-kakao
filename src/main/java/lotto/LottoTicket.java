@@ -11,24 +11,33 @@ public class LottoTicket {
 	private final Set<LottoNumber> numbers;
 
 	public LottoTicket() {
-		this.numbers = new HashSet<>();
-		for(Integer number: generateUniqueSixNumbers()){
-			this.numbers.add(new LottoNumber(number));
-		}
+		this(generateUniqueSixNumbers());
+	}
+
+	public LottoTicket(Set<LottoNumber> numbers) {
+		validateNumbers(numbers);
+		this.numbers = new HashSet<>(numbers);
 	}
 
 	public Set<LottoNumber> getNumbers() {
-		return numbers;
+		return Collections.unmodifiableSet(numbers);
 	}
 
-	private Set<Integer> generateUniqueSixNumbers() {
+	private void validateNumbers(Set<LottoNumber> numbers) {
+		if (numbers.size() != 6)
+			throw new IllegalArgumentException("로또 번호는 6개여야 합니다.");
+	}
+
+	private static Set<LottoNumber> generateUniqueSixNumbers() {
 		List<Integer> numbers = new ArrayList<>();
 		for (int i = 1; i <= 45; i++) {
 			numbers.add(i);
 		}
-
 		Collections.shuffle(numbers);
-
-		return new HashSet<>(numbers.subList(0, 6));
+		Set<LottoNumber> lottoNumbers = new HashSet<>();
+		for (Integer number : numbers.subList(0, 6)) {
+			lottoNumbers.add(new LottoNumber(number));
+		}
+		return lottoNumbers;
 	}
 }
