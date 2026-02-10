@@ -2,9 +2,6 @@ package lotto;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.List;
-
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +10,7 @@ public class LottoTicketGeneratorTest {
 	@DisplayName("양의 정수 n개의 티켓을 생성해서 List로 반환한다")
 	public void generate(){
 		final int TICKET_NUMBER = 17;
-		List<LottoTicket> lottoTickets = LottoTicketGenerator.generate(TICKET_NUMBER);
+		LottoTickets lottoTickets = LottoTicketGenerator.generate(TICKET_NUMBER);
 		assertThat(lottoTickets.size()).isEqualTo(TICKET_NUMBER);
 	}
 

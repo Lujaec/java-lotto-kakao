@@ -13,6 +13,7 @@ public class LottoStatisticsTest {
 	@DisplayName("로또 통계 생성")
 	public void lotto_statistic_add () {
 		LottoStatistics lottoStatistics = new LottoStatistics();
+		Money purchaseMoney = new Money(10000);
 
 		List<Rank> ranks = List.of(
 			Rank.OTHER, Rank.OTHER, Rank.OTHER,
@@ -21,15 +22,13 @@ public class LottoStatisticsTest {
 			Rank.FIFTH
 		);
 		final long totalPrizeMoney = ranks.stream().mapToLong(Rank::prizeMoney).sum();
-		final int totalMoneySpent = ranks.size() * 1000;
-		final double profitRate = (double) totalPrizeMoney / totalMoneySpent;
+		final double profitRate = (double) totalPrizeMoney / purchaseMoney.getValue();
 
-		// 통계생성
 		for(Rank rank: ranks){
 			lottoStatistics.add(rank);
 		}
 
-		assertThat(lottoStatistics.profitRate()).isEqualTo(profitRate);
+		assertThat(lottoStatistics.profitRate(purchaseMoney)).isEqualTo(profitRate);
 		assertThat(lottoStatistics.totalPrizeMoney()).isEqualTo(totalPrizeMoney);
 	}
 
@@ -44,7 +43,7 @@ public class LottoStatisticsTest {
 			lottoStatistics.add(rank);
 		}
 
-		assertThat(lottoStatistics.profitRate()).isEqualTo(0);
+		assertThat(lottoStatistics.profitRate(new Money(1000))).isEqualTo(0);
 		assertThat(lottoStatistics.totalPrizeMoney()).isEqualTo(0);
 	}
 

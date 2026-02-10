@@ -1,7 +1,6 @@
 package lotto;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +15,8 @@ public class LottoTicketTest {
 	@DisplayName("로또 티켓 생성 확인")
 	public void init_lotto_ticket(){
 		LottoTicket lottoTicket = new LottoTicket();
-		Set <LottoNumber> numbers = lottoTicket.getNumbers();
-		Set <Integer> setNumbers = numbers.stream().map(LottoNumber::getValue).collect(Collectors.toSet());
-		Assertions.assertThat(setNumbers.size()).isEqualTo(6);
+		ArrayList<LottoNumber> numbers = lottoTicket.getNumbers();
+		Assertions.assertThat(numbers.size()).isEqualTo(6);
 	}
 
 
