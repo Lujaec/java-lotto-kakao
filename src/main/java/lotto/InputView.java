@@ -1,9 +1,8 @@
 package lotto;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Set;
+import java.util.StringTokenizer;
 
 public class InputView {
 	private final Scanner scanner = new Scanner(System.in);
@@ -13,10 +12,9 @@ public class InputView {
 		return new Money(parseInteger(scanner.nextLine()));
 	}
 
-	public Set<LottoNumber> readWinningNumbers() {
+	public LottoTicket readWinningNumbers() {
 		System.out.println("지난 주 당첨 번호를 입력해 주세요.");
-		String input = scanner.nextLine();
-		return parseWinningNumbers(input);
+		return new LottoTicket(parseWinningNumbers(scanner.nextLine()));
 	}
 
 	public LottoNumber readBonusNumber() {
@@ -24,31 +22,35 @@ public class InputView {
 		return new LottoNumber(parseInteger(scanner.nextLine()));
 	}
 
-	private Set<LottoNumber> parseWinningNumbers(String input) {
-		String[] splitNumbers = Arrays.stream(input.split(","))
-			.map(String::trim)
-			.toArray(String[]::new);
-		validateWinningNumbersCount(splitNumbers);
-		return toLottoNumbers(splitNumbers);
+	private ArrayList<LottoNumber> parseWinningNumbers(String input) {
+		ArrayList<LottoNumber> winningNumbers = new ArrayList<>();
+		StringTokenizer stringTokenizer = new StringTokenizer(input, ",");
+		while (stringTokenizer.hasMoreTokens()) winningNumbers.add(parseLottoNumber(stringTokenizer.nextToken()));
+		validateWinningNumbersCount(winningNumbers);
+		validateUniqueNumbers(winningNumbers);
+		return winningNumbers;
 	}
 
-	private void validateWinningNumbersCount(String[] splitNumbers) {
-		if (splitNumbers.length != 6) {
+	private LottoNumber parseLottoNumber(String token) {
+		return new LottoNumber(parseInteger(token));
+	}
+
+	private void validateWinningNumbersCount(ArrayList<LottoNumber> winningNumbers) {
+		if (winningNumbers.size() != 6) {
 			throw new IllegalArgumentException("당첨 번호는 6개를 입력해야 합니다.");
 		}
 	}
 
-	private Set<LottoNumber> toLottoNumbers(String[] splitNumbers) {
-		Set<LottoNumber> numbers = new HashSet<>();
-		for (String splitNumber : splitNumbers) {
-			numbers.add(new LottoNumber(parseInteger(splitNumber)));
+	private void validateUniqueNumbers(ArrayList<LottoNumber> winningNumbers) {
+		ArrayList<LottoNumber> uniqueNumbers = new ArrayList<>();
+		for (LottoNumber winningNumber : winningNumbers) {
+			validateNotDuplicated(uniqueNumbers, winningNumber);
+			uniqueNumbers.add(winningNumber);
 		}
-		validateUniqueNumbers(numbers);
-		return numbers;
 	}
 
-	private void validateUniqueNumbers(Set<LottoNumber> numbers) {
-		if (numbers.size() != 6) {
+	private void validateNotDuplicated(ArrayList<LottoNumber> uniqueNumbers, LottoNumber winningNumber) {
+		if (uniqueNumbers.contains(winningNumber)) {
 			throw new IllegalArgumentException("당첨 번호는 중복될 수 없습니다.");
 		}
 	}

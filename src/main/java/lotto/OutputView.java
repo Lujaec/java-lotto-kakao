@@ -2,48 +2,51 @@ package lotto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 public class OutputView {
-	public void printPurchaseResult(List<LottoTicket> lottoTickets) {
+	public void printPurchaseResult(LottoTickets lottoTickets) {
 		System.out.printf("%d개를 구매했습니다.%n", lottoTickets.size());
-		for (LottoTicket lottoTicket : lottoTickets) {
-			System.out.println(formatNumbers(lottoTicket));
-		}
+		lottoTickets.forEach(this::printLottoNumbers);
 		System.out.println();
 	}
 
-	public void printStatistics(LottoStatistics lottoStatistics) {
-		System.out.println();
-		System.out.println("당첨 통계");
-		System.out.println("---------");
-		printRankResult("3개 일치 (5000원)", lottoStatistics.countOf(Rank.FIFTH));
-		printRankResult("4개 일치 (50000원)", lottoStatistics.countOf(Rank.FOURTH));
-		printRankResult("5개 일치 (1500000원)", lottoStatistics.countOf(Rank.THIRD));
-		printRankResult("5개 일치, 보너스 볼 일치(30000000원)", lottoStatistics.countOf(Rank.SECOND));
-		printRankResult("6개 일치 (2000000000원)", lottoStatistics.countOf(Rank.FIRST));
-		System.out.printf("총 수익률은 %s입니다.%n", formatProfitRate(lottoStatistics.profitRate()));
+	public void printStatistics(LottoStatistics lottoStatistics, Money purchaseMoney) {
+		printStatisticsHeader();
+		for (Rank rank : Rank.winningRanks()) {
+			printRankResult(rank, lottoStatistics.countOf(rank));
+		}
+		printProfitRate(lottoStatistics.profitRate(purchaseMoney));
 	}
 
 	public void printError(String message) {
-		if (message == null || message.isBlank()) {
-			System.out.println("[ERROR] 잘못된 입력입니다.");
-			return;
-		}
 		System.out.printf("[ERROR] %s%n", message);
 	}
 
-	private List<Integer> formatNumbers(LottoTicket lottoTicket) {
-		return lottoTicket.getNumbers().stream()
-			.map(LottoNumber::getValue)
-			.sorted(Comparator.naturalOrder())
-			.collect(Collectors.toList());
+	private ArrayList<Integer> formatNumbers(LottoNumbers lottoNumbers) {
+		ArrayList<Integer> formattedNumbers = new ArrayList<>();
+		for (LottoNumber lottoNumber : lottoNumbers.values()) {
+			formattedNumbers.add(lottoNumber.getValue());
+		}
+		return formattedNumbers;
 	}
 
-	private void printRankResult(String label, int count) {
-		System.out.printf("%s - %d개%n", label, count);
+	private void printLottoNumbers(LottoTicket lottoTicket) {
+		System.out.println(formatNumbers(lottoTicket.getLottoNumbers()));
+	}
+
+	private void printStatisticsHeader() {
+		System.out.println();
+		System.out.println("당첨 통계");
+		System.out.println("---------");
+	}
+
+	private void printRankResult(Rank rank, int count) {
+		System.out.printf("%s - %d개%n", rank.description(), count);
+	}
+
+	private void printProfitRate(double profitRate) {
+		System.out.printf("총 수익률은 %s입니다.%n", formatProfitRate(profitRate));
 	}
 
 	private String formatProfitRate(double profitRate) {

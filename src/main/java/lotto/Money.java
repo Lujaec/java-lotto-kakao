@@ -1,19 +1,36 @@
 package lotto;
 
 public class Money {
+	private static final int LOTTO_PRICE = 1000;
 	private final int value;
 
 	public Money(int value) {
-		this.validateAmount(value);
+		validateAmount(value);
 		this.value = value;
 	}
 
-	public int toPurchaseCount(){
-		return this.value / 1000;
+	public int toPurchaseCount() {
+		return value / LOTTO_PRICE;
 	}
 
-	private void validateAmount(int value){
-		if (value < 0)
-			throw new IllegalArgumentException();
+	public int getValue() {
+		return value;
+	}
+
+	private void validateAmount(int value) {
+		validateMinimumAmount(value);
+		validateAmountUnit(value);
+	}
+
+	private void validateMinimumAmount(int value) {
+		if (value < LOTTO_PRICE) {
+			throw new IllegalArgumentException("구입 금액은 1000원 이상이어야 합니다.");
+		}
+	}
+
+	private void validateAmountUnit(int value) {
+		if (value % LOTTO_PRICE != 0) {
+			throw new IllegalArgumentException("구입 금액은 1000원 단위여야 합니다.");
+		}
 	}
 }
