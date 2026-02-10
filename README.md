@@ -11,7 +11,7 @@
 ### 2.2 자동 발급
 - 로또 1장의 가격은 1000원이다.
 - `Money`로 구매 가능 수량을 계산한다.
-- `LottoNumberGenerator`가 티켓 수량만큼 `LottoTicket`을 생성한다.
+- `LottoTicketGenerator`가 티켓 수량만큼 `LottoTicket`을 생성한다.
 - 구입 금액(`Money`)과 발급된 `List<LottoTicket>`은 실행 흐름 객체가 직접 관리한다.
 - `OuputView`가 구매 수량과 티켓 번호를 출력한다.
 
@@ -36,7 +36,7 @@
 ## 4. 처리 흐름
 1. `InputView`에서 구입 금액 입력
 2. 실행 흐름 객체에서 `Money`를 보관
-3. `LottoNumberGenerator`로 `List<LottoTicket>` 생성 및 보관
+3. `LottoTicketGenerator`로 `List<LottoTicket>` 생성 및 보관
 4. `OuputView`로 발급 티켓 출력
 5. `InputView`에서 당첨 번호/보너스 입력 후 `LottoAnswer` 생성
 6. 모든 `LottoTicket`을 `LottoAnswer.judge()`로 판정
@@ -50,7 +50,7 @@
 - `Money`: 구입 금액 값 객체 및 구매 수량 계산
 - `LottoNumber`: 번호 값 객체(범위 검증)
 - `LottoTicket`: 로또 한 장(`Set<LottoNumber>`)과 티켓 유효성 보장
-- `LottoNumberGenerator`: 자동 번호 생성
+- `LottoTicketGenerator`: 자동 번호 생성
 - `LottoAnswer`: 당첨 번호/보너스 보관, `judge()` 제공
 - `Rank`: 당첨 등수 enum
 - `LottoStatistics`: 등수별 개수, 총 당첨금, 수익률 계산
@@ -98,8 +98,8 @@ class LottoNumber {
   -value: int
 }
 
-class LottoNumberGenerator {
-  +generate(Money) List~LottoTicket~
+class LottoTicketGenerator {
+  +generate(int) List~LottoTicket~
 }
 
 class LottoAnswer {
@@ -124,12 +124,11 @@ LottoController --> InputView
 LottoController --> OuputView
 LottoController --> Money
 LottoController --> LottoTicket
-LottoController --> LottoNumberGenerator
+LottoController --> LottoTicketGenerator
 LottoController --> LottoAnswer
 LottoController --> LottoStatistics
 LottoTicket --> LottoNumber
-LottoNumberGenerator --> Money
-LottoNumberGenerator --> LottoTicket
+LottoTicketGenerator --> LottoTicket
 LottoAnswer --> LottoNumber
 LottoAnswer --> LottoTicket
 LottoAnswer --> Rank
