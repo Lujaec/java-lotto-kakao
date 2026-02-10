@@ -10,6 +10,10 @@ public class LottoStatistics {
 		cntByRank.put(rank, cntByRank.getOrDefault(rank,0)+1);
 	}
 
+	public int countOf(Rank rank) {
+		return cntByRank.getOrDefault(rank, 0);
+	}
+
  	public long	totalPrizeMoney() {
 		long ret = 0;
 		for(Map.Entry<Rank, Integer> map: cntByRank.entrySet()){
