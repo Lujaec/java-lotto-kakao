@@ -1,0 +1,63 @@
+package lotto;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+public class InputView {
+	private final Scanner scanner = new Scanner(System.in);
+
+	public Money readMoney() {
+		System.out.println("구입금액을 입력해 주세요.");
+		return new Money(parseInteger(scanner.nextLine()));
+	}
+
+	public Set<LottoNumber> readWinningNumbers() {
+		System.out.println("지난 주 당첨 번호를 입력해 주세요.");
+		String input = scanner.nextLine();
+		return parseWinningNumbers(input);
+	}
+
+	public LottoNumber readBonusNumber() {
+		System.out.println("보너스 볼을 입력해 주세요.");
+		return new LottoNumber(parseInteger(scanner.nextLine()));
+	}
+
+	private Set<LottoNumber> parseWinningNumbers(String input) {
+		String[] splitNumbers = Arrays.stream(input.split(","))
+			.map(String::trim)
+			.toArray(String[]::new);
+		validateWinningNumbersCount(splitNumbers);
+		return toLottoNumbers(splitNumbers);
+	}
+
+	private void validateWinningNumbersCount(String[] splitNumbers) {
+		if (splitNumbers.length != 6) {
+			throw new IllegalArgumentException("당첨 번호는 6개를 입력해야 합니다.");
+		}
+	}
+
+	private Set<LottoNumber> toLottoNumbers(String[] splitNumbers) {
+		Set<LottoNumber> numbers = new HashSet<>();
+		for (String splitNumber : splitNumbers) {
+			numbers.add(new LottoNumber(parseInteger(splitNumber)));
+		}
+		validateUniqueNumbers(numbers);
+		return numbers;
+	}
+
+	private void validateUniqueNumbers(Set<LottoNumber> numbers) {
+		if (numbers.size() != 6) {
+			throw new IllegalArgumentException("당첨 번호는 중복될 수 없습니다.");
+		}
+	}
+
+	private int parseInteger(String input) {
+		try {
+			return Integer.parseInt(input.trim());
+		} catch (NumberFormatException exception) {
+			throw new IllegalArgumentException("숫자만 입력할 수 있습니다.");
+		}
+	}
+}
