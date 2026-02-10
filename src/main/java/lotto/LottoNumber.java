@@ -1,9 +1,9 @@
 package lotto;
 
-public class RottoNumber {
+public class LottoNumber {
 	private final int value;
 
-	public RottoNumber(int value) {
+	public LottoNumber(int value) {
 		validateNumber(value);
 		this.value = value;
 	}

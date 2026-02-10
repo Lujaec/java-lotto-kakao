@@ -11,49 +11,49 @@
 ### 2.2 자동 발급
 - 로또 1장의 가격은 1000원이다.
 - `Money`로 구매 가능 수량을 계산한다.
-- `RottoNumberGenerator`가 티켓 수량만큼 `RottoTicket`을 생성한다.
-- 구입 금액(`Money`)과 발급된 `List<RottoTicket>`은 실행 흐름 객체가 직접 관리한다.
+- `LottoNumberGenerator`가 티켓 수량만큼 `LottoTicket`을 생성한다.
+- 구입 금액(`Money`)과 발급된 `List<LottoTicket>`은 실행 흐름 객체가 직접 관리한다.
 - `OuputView`가 구매 수량과 티켓 번호를 출력한다.
 
 ### 2.3 당첨 판정
-- `RottoAnswer`는 당첨 번호 6개와 보너스 번호 1개를 가진다.
-- `RottoAnswer.judge(RottoTicket)`로 티켓 1장의 결과를 `Rank`로 판정한다.
+- `LottoAnswer`는 당첨 번호 6개와 보너스 번호 1개를 가진다.
+- `LottoAnswer.judge(LottoTicket)`로 티켓 1장의 결과를 `Rank`로 판정한다.
 - `Rank`는 당첨 기준과 상금 정보를 가진 enum으로 관리한다.
 
 ### 2.4 통계/수익률
-- `RottoStatistics`는 `Map<Rank, Integer>`로 등수별 당첨 개수를 집계한다.
+- `LottoStatistics`는 `Map<Rank, Integer>`로 등수별 당첨 개수를 집계한다.
 - 총 당첨금과 수익률(총 당첨금 / 구입 금액)을 계산한다.
 - `OuputView`가 당첨 통계와 수익률을 출력한다.
 
 ## 3. 검증 규칙
 - 구입 금액은 1000원 이상, 1000원 단위여야 한다.
-- `RottoNumber`는 1~45 범위여야 한다.
-- `RottoTicket`은 중복 없는 6개 번호여야 한다.
-- `RottoAnswer`의 기본 당첨 번호는 중복 없는 6개여야 한다.
+- `LottoNumber`는 1~45 범위여야 한다.
+- `LottoTicket`은 중복 없는 6개 번호여야 한다.
+- `LottoAnswer`의 기본 당첨 번호는 중복 없는 6개여야 한다.
 - 보너스 번호는 기본 당첨 번호와 중복되면 안 된다.
 - 검증 실패 시 `[ERROR]` 메시지를 출력하고 재입력한다.
 
 ## 4. 처리 흐름
 1. `InputView`에서 구입 금액 입력
 2. 실행 흐름 객체에서 `Money`를 보관
-3. `RottoNumberGenerator`로 `List<RottoTicket>` 생성 및 보관
+3. `LottoNumberGenerator`로 `List<LottoTicket>` 생성 및 보관
 4. `OuputView`로 발급 티켓 출력
-5. `InputView`에서 당첨 번호/보너스 입력 후 `RottoAnswer` 생성
-6. 모든 `RottoTicket`을 `RottoAnswer.judge()`로 판정
-7. `RottoStatistics`에 `Rank` 집계
+5. `InputView`에서 당첨 번호/보너스 입력 후 `LottoAnswer` 생성
+6. 모든 `LottoTicket`을 `LottoAnswer.judge()`로 판정
+7. `LottoStatistics`에 `Rank` 집계
 8. `OuputView`로 통계/수익률 출력
 
 ## 5. 클래스 책임
 - `InputView`: 콘솔 입력 처리
 - `OuputView`: 콘솔 출력 처리
-- `LottoController`: 실행 흐름 제어, `Money`와 `List<RottoTicket>` 관리
+- `LottoController`: 실행 흐름 제어, `Money`와 `List<LottoTicket>` 관리
 - `Money`: 구입 금액 값 객체 및 구매 수량 계산
-- `RottoNumber`: 번호 값 객체(범위 검증)
-- `RottoTicket`: 로또 한 장(`Set<RottoNumber>`)과 티켓 유효성 보장
-- `RottoNumberGenerator`: 자동 번호 생성
-- `RottoAnswer`: 당첨 번호/보너스 보관, `judge()` 제공
+- `LottoNumber`: 번호 값 객체(범위 검증)
+- `LottoTicket`: 로또 한 장(`Set<LottoNumber>`)과 티켓 유효성 보장
+- `LottoNumberGenerator`: 자동 번호 생성
+- `LottoAnswer`: 당첨 번호/보너스 보관, `judge()` 제공
 - `Rank`: 당첨 등수 enum
-- `RottoStatistics`: 등수별 개수, 총 당첨금, 수익률 계산
+- `LottoStatistics`: 등수별 개수, 총 당첨금, 수익률 계산
 
 ## 6. 구현 원칙 (과제 요구 반영)
 - `else` 없이 조기 반환으로 분기 단순화
@@ -61,7 +61,7 @@
 - 메서드 단일 책임 유지
 - 배열 대신 `ArrayList` 사용
 - 원시값/문자열 포장
-- 일급 컬렉션(`Set<RottoNumber>`, `RottoStatistics`) 사용
+- 일급 컬렉션(`Set<LottoNumber>`, `LottoStatistics`) 사용
 - enum(`Rank`) 사용
 
 ## 7. 클래스 다이어그램
@@ -71,18 +71,18 @@ direction LR
 
 class InputView {
   +readMoney() Money
-  +readWinningNumbers() Set~RottoNumber~
-  +readBonusNumber() RottoNumber
+  +readWinningNumbers() Set~LottoNumber~
+  +readBonusNumber() LottoNumber
 }
 
 class OuputView {
-  +printTickets(List~RottoTicket~)
-  +printStatistics(RottoStatistics)
+  +printTickets(List~LottoTicket~)
+  +printStatistics(LottoStatistics)
 }
 
 class LottoController {
   -money: Money
-  -tickets: List~RottoTicket~
+  -tickets: List~LottoTicket~
 }
 
 class Money {
@@ -90,22 +90,22 @@ class Money {
   +toPurchaseCount() int
 }
 
-class RottoTicket {
-  -numbers: Set~RottoNumber~
+class LottoTicket {
+  -numbers: Set~LottoNumber~
 }
 
-class RottoNumber {
+class LottoNumber {
   -value: int
 }
 
-class RottoNumberGenerator {
-  +generate(Money) List~RottoTicket~
+class LottoNumberGenerator {
+  +generate(Money) List~LottoTicket~
 }
 
-class RottoAnswer {
-  -winningNumbers: Set~RottoNumber~
-  -bonus: RottoNumber
-  +judge(RottoTicket) Rank
+class LottoAnswer {
+  -winningNumbers: Set~LottoNumber~
+  -bonus: LottoNumber
+  +judge(LottoTicket) Rank
 }
 
 class Rank {
@@ -113,7 +113,7 @@ class Rank {
   +prizeMoney: long
 }
 
-class RottoStatistics {
+class LottoStatistics {
   -cntByRank: Map~Rank,Integer~
   -totalPrizeMoney() long
   +add(Rank)
@@ -123,19 +123,19 @@ class RottoStatistics {
 LottoController --> InputView
 LottoController --> OuputView
 LottoController --> Money
-LottoController --> RottoTicket
-LottoController --> RottoNumberGenerator
-LottoController --> RottoAnswer
-LottoController --> RottoStatistics
-RottoTicket --> RottoNumber
-RottoNumberGenerator --> Money
-RottoNumberGenerator --> RottoTicket
-RottoAnswer --> RottoNumber
-RottoAnswer --> RottoTicket
-RottoAnswer --> Rank
-RottoStatistics --> Rank
-OuputView --> RottoTicket
-OuputView --> RottoStatistics
+LottoController --> LottoTicket
+LottoController --> LottoNumberGenerator
+LottoController --> LottoAnswer
+LottoController --> LottoStatistics
+LottoTicket --> LottoNumber
+LottoNumberGenerator --> Money
+LottoNumberGenerator --> LottoTicket
+LottoAnswer --> LottoNumber
+LottoAnswer --> LottoTicket
+LottoAnswer --> Rank
+LottoStatistics --> Rank
+OuputView --> LottoTicket
+OuputView --> LottoStatistics
 ```
 
 # 로또
