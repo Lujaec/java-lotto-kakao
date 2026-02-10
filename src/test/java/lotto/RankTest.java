@@ -1,7 +1,5 @@
 package lotto;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +14,7 @@ class RankTest {
 		put("THIRD", 1500000L);
 		put("FOURTH", 50000L);
 		put("FIFTH", 5000L);
+		put("OTHER", 0L);
 	}};
 
 	@Test

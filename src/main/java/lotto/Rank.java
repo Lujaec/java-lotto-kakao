@@ -6,6 +6,7 @@ public enum Rank {
 	THIRD(1500000L),
 	FOURTH(50000L),
 	FIFTH(5000L),
+	OTHER(0L)
 	;
 	private final long prizeMoney;
 
