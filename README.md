@@ -117,7 +117,7 @@ class LottoStatistics {
   -cntByRank: Map~Rank,Integer~
   -totalPrizeMoney() long
   +add(Rank)
-  +profitRate(Money) double
+  +profitRate() double
 }
 
 LottoController --> InputView
