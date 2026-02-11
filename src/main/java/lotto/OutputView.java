@@ -13,8 +13,8 @@ public class OutputView {
 
 	public void printStatistics(LottoStatistics lottoStatistics, Money purchaseMoney) {
 		printStatisticsHeader();
-		for (Rank rank : Rank.winningRanks()) {
-			printRankResult(rank, lottoStatistics.countOf(rank));
+		for (RankView rankView : RankView.winningViews()) {
+			printRankResult(rankView, lottoStatistics.countOf(rankView.rank()));
 		}
 		printProfitRate(lottoStatistics.profitRate(purchaseMoney));
 	}
@@ -41,8 +41,8 @@ public class OutputView {
 		System.out.println("---------");
 	}
 
-	private void printRankResult(Rank rank, int count) {
-		System.out.printf("%s - %d개%n", rank.description(), count);
+	private void printRankResult(RankView rankView, int count) {
+		System.out.printf("%s - %d개%n", rankView.description(), count);
 	}
 
 	private void printProfitRate(double profitRate) {
