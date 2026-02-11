@@ -25,8 +25,9 @@ public class InputView {
 
 	private List<LottoNumber> parseWinningNumbers(String input) {
 		List<LottoNumber> winningNumbers = new ArrayList<>();
-		StringTokenizer stringTokenizer = new StringTokenizer(input, ",");
-		while (stringTokenizer.hasMoreTokens()) winningNumbers.add(parseLottoNumber(stringTokenizer.nextToken()));
+		for (String token : input.split(",")) {
+			winningNumbers.add(parseLottoNumber(token));
+		}
 		return winningNumbers;
 	}
 
