@@ -1,6 +1,7 @@
 package lotto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +16,7 @@ public class LottoTicketTest {
 	@DisplayName("로또 티켓 생성 확인")
 	public void init_lotto_ticket(){
 		LottoTicket lottoTicket = new LottoTicket();
-		ArrayList<LottoNumber> numbers = lottoTicket.getNumbers();
+		List<LottoNumber> numbers = lottoTicket.getNumbers();
 		Assertions.assertThat(numbers.size()).isEqualTo(6);
 	}
 

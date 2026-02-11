@@ -1,6 +1,7 @@
 package lotto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LottoTicketGenerator {
 	public static LottoTickets generate(int ticketCount) {
@@ -15,7 +16,7 @@ public class LottoTicketGenerator {
 	}
 
 	private static LottoTickets createLottoTickets(int ticketCount) {
-		ArrayList<LottoTicket> tickets = new ArrayList<>();
+		List<LottoTicket> tickets = new ArrayList<>();
 		for (int ticketIndex = 0; ticketIndex < ticketCount; ticketIndex++) {
 			tickets.add(new LottoTicket());
 		}

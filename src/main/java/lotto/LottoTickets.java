@@ -1,12 +1,13 @@
 package lotto;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class LottoTickets {
 	private final ArrayList<LottoTicket> lottoTickets;
 
-	public LottoTickets(ArrayList<LottoTicket> lottoTickets) {
+	public LottoTickets(List<LottoTicket> lottoTickets) {
 		this.lottoTickets = new ArrayList<>(lottoTickets);
 	}
 

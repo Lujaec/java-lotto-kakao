@@ -3,14 +3,15 @@ package lotto;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class LottoNumbers {
 	private static final int LOTTO_NUMBER_COUNT = 6;
 	private static final int MIN_LOTTO_NUMBER = 1;
 	private static final int MAX_LOTTO_NUMBER = 45;
-	private final ArrayList<LottoNumber> numbers;
+	private final List<LottoNumber> numbers;
 
-	public LottoNumbers(ArrayList<LottoNumber> numbers) {
+	public LottoNumbers(List<LottoNumber> numbers) {
 		validateNumberCount(numbers);
 		validateUniqueNumbers(numbers);
 		this.numbers = new ArrayList<>(numbers);
@@ -18,12 +19,12 @@ public class LottoNumbers {
 	}
 
 	public static LottoNumbers random() {
-		ArrayList<Integer> numberCandidates = createNumberCandidates();
+		List<Integer> numberCandidates = createNumberCandidates();
 		Collections.shuffle(numberCandidates);
 		return new LottoNumbers(convertToLottoNumbers(numberCandidates));
 	}
 
-	public ArrayList<LottoNumber> values() {
+	public List<LottoNumber> values() {
 		return new ArrayList<>(numbers);
 	}
 
@@ -37,36 +38,36 @@ public class LottoNumbers {
 			.count();
 	}
 
-	private void validateNumberCount(ArrayList<LottoNumber> numbers) {
+	private void validateNumberCount(List<LottoNumber> numbers) {
 		if (numbers.size() != LOTTO_NUMBER_COUNT) {
 			throw new IllegalArgumentException("로또 번호는 6개여야 합니다.");
 		}
 	}
 
-	private void validateUniqueNumbers(ArrayList<LottoNumber> numbers) {
-		ArrayList<LottoNumber> uniqueNumbers = new ArrayList<>();
+	private void validateUniqueNumbers(List<LottoNumber> numbers) {
+		List<LottoNumber> uniqueNumbers = new ArrayList<>();
 		for (LottoNumber lottoNumber : numbers) {
 			validateNotDuplicated(uniqueNumbers, lottoNumber);
 			uniqueNumbers.add(lottoNumber);
 		}
 	}
 
-	private void validateNotDuplicated(ArrayList<LottoNumber> uniqueNumbers, LottoNumber lottoNumber) {
+	private void validateNotDuplicated(List<LottoNumber> uniqueNumbers, LottoNumber lottoNumber) {
 		if (uniqueNumbers.contains(lottoNumber)) {
 			throw new IllegalArgumentException("로또 번호는 중복될 수 없습니다.");
 		}
 	}
 
-	private static ArrayList<Integer> createNumberCandidates() {
-		ArrayList<Integer> numberCandidates = new ArrayList<>();
+	private static List<Integer> createNumberCandidates() {
+		List<Integer> numberCandidates = new ArrayList<>();
 		for (int lottoNumberValue = MIN_LOTTO_NUMBER; lottoNumberValue <= MAX_LOTTO_NUMBER; lottoNumberValue++) {
 			numberCandidates.add(lottoNumberValue);
 		}
 		return numberCandidates;
 	}
 
-	private static ArrayList<LottoNumber> convertToLottoNumbers(ArrayList<Integer> numberCandidates) {
-		ArrayList<LottoNumber> lottoNumbers = new ArrayList<>();
+	private static List<LottoNumber> convertToLottoNumbers(List<Integer> numberCandidates) {
+		List<LottoNumber> lottoNumbers = new ArrayList<>();
 		for (Integer number : numberCandidates.subList(0, LOTTO_NUMBER_COUNT)) {
 			lottoNumbers.add(new LottoNumber(number));
 		}

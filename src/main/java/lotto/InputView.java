@@ -1,6 +1,7 @@
 package lotto;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -22,8 +23,8 @@ public class InputView {
 		return new LottoNumber(parseInteger(scanner.nextLine()));
 	}
 
-	private ArrayList<LottoNumber> parseWinningNumbers(String input) {
-		ArrayList<LottoNumber> winningNumbers = new ArrayList<>();
+	private List<LottoNumber> parseWinningNumbers(String input) {
+		List<LottoNumber> winningNumbers = new ArrayList<>();
 		StringTokenizer stringTokenizer = new StringTokenizer(input, ",");
 		while (stringTokenizer.hasMoreTokens()) winningNumbers.add(parseLottoNumber(stringTokenizer.nextToken()));
 		return winningNumbers;

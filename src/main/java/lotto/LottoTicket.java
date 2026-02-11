@@ -1,6 +1,7 @@
 package lotto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LottoTicket {
 	private final LottoNumbers lottoNumbers;
@@ -9,7 +10,7 @@ public class LottoTicket {
 		this(LottoNumbers.random());
 	}
 
-	public LottoTicket(ArrayList<LottoNumber> numbers) {
+	public LottoTicket(List<LottoNumber> numbers) {
 		this(new LottoNumbers(numbers));
 	}
 
@@ -21,7 +22,7 @@ public class LottoTicket {
 		return lottoNumbers;
 	}
 
-	public ArrayList<LottoNumber> getNumbers() {
+	public List<LottoNumber> getNumbers() {
 		return lottoNumbers.values();
 	}
 }
