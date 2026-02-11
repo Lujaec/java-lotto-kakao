@@ -33,4 +33,17 @@ public class Money {
 			throw new IllegalArgumentException("구입 금액은 1000원 단위여야 합니다.");
 		}
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Money)) return false;
+		Money money = (Money) o;
+		return value == money.value;
+	}
+
+	@Override
+	public int hashCode() {
+		return Integer.hashCode(value);
+	}
 }
