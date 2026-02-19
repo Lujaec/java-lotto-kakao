@@ -9,8 +9,8 @@ public class Money {
 		this.value = value;
 	}
 
-	public int toPurchaseCount() {
-		return value / LOTTO_PRICE;
+	public Count toPurchaseCount() {
+		return new Count(value / LOTTO_PRICE);
 	}
 
 	public int getValue() {
