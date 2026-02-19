@@ -19,7 +19,7 @@ public class InputView {
 
 	public LottoNumber readBonusNumber() {
 		System.out.println("보너스 볼을 입력해 주세요.");
-		return new LottoNumber(parseInteger(scanner.nextLine()));
+		return LottoNumber.from(parseInteger(scanner.nextLine()));
 	}
 
 	public int readManualLottoCount() {
@@ -53,7 +53,7 @@ public class InputView {
 	}
 
 	private LottoNumber parseLottoNumber(String token) {
-		return new LottoNumber(parseInteger(token));
+		return LottoNumber.from(parseInteger(token));
 	}
 
 	private int parseInteger(String input) {
